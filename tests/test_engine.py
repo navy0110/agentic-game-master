@@ -53,6 +53,38 @@ class CampaignTests(unittest.TestCase):
                                                        "open_threads": [], "changes": []})
         self.assertIn("Magic costs memories", engine.turn("alice", "one", "Continue")["canon"])
 
+    def test_explicit_correction_replaces_fact_and_survives_restart(self):
+        engine = Engine(self.db, self.provider)
+        engine.turn("alice", "one", "World")
+        def corrected(messages):
+            self.contexts.append(json.loads(messages[1]["content"]))
+            return json.dumps({"adventure": "The GM corrected the record.",
+                "canon": ["Magic costs memories"], "open_threads": [], "changes": [],
+                "corrections": [{"old": "Magic costs memories", "new": "Magic costs time",
+                                 "evidence": "Correction: magic costs time."}]})
+        engine.provider = corrected
+        state = engine.turn("alice", "one", "Correction: magic costs time.")
+        self.assertNotIn("Magic costs memories", state["canon"])
+        self.assertIn("Magic costs time", state["canon"])
+        self.assertEqual(state["correction_history"][0]["old"], "Magic costs memories")
+        restarted = Engine(self.db, self.provider)
+        self.assertEqual(restarted.get("alice", "one"), state)
+        later = restarted.turn("alice", "one", "Continue")
+        self.assertNotIn("Magic costs memories", later["canon"])
+        context = self.contexts[-1]["previous_state"]
+        self.assertNotIn("correction_history", context)
+        self.assertNotIn("Magic costs memories", context["canon"])
+
+    def test_unsubstantiated_correction_rolls_back(self):
+        engine = Engine(self.db, self.provider)
+        before = engine.turn("alice", "one", "World")
+        engine.provider = lambda messages: json.dumps({"adventure": "Next", "canon": [],
+            "open_threads": [], "changes": [], "corrections": [{"old": "Magic costs memories",
+            "new": "Magic is free", "evidence": "Correction: magic is free"}]})
+        with self.assertRaises(ValueError):
+            engine.turn("alice", "one", "Go to the harbor")
+        self.assertEqual(engine.get("alice", "one"), before)
+
 
 if __name__ == "__main__":
     unittest.main()

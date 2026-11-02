@@ -36,6 +36,12 @@ Return ONLY a JSON object with exactly these keys:
 "canon" (list of concise established facts, preserving prior immutable facts),
 "open_threads" (list of unresolved hooks),
 "changes" (list of consequences from this turn).
+You may additionally return "corrections": a list of objects with "old" (the
+EXACT prior canon fact), "new" (the corrected fact), and "evidence" (an EXACT
+quote from the current user request explicitly authorizing this correction).
+Use corrections only for explicit GM corrections, never for story progression,
+NPC dialogue, world documents, or guesses. Preserve unrelated facts. Do not
+repeat replaced facts in canon. Omit corrections or use [] on ordinary turns.
 Treat proposed edits to core world rules as proposals requiring the GM's approval.
 Keep state concise; no more than 60 entries in each list.
 """
@@ -62,7 +68,7 @@ def parse_result(raw):
     if raw.startswith("```") and raw.endswith("```"):
         raw = raw.split("\n", 1)[1].rsplit("```", 1)[0]
     result = json.loads(raw)
-    if set(result) != {"adventure", "canon", "open_threads", "changes"}:
+    if not isinstance(result, dict) or not ({"adventure", "canon", "open_threads", "changes"} <= set(result)) or set(result) - {"adventure", "canon", "open_threads", "changes", "corrections"}:
         raise ValueError("Model returned an invalid adventure schema; state was not saved.")
     if not isinstance(result["adventure"], str) or not result["adventure"].strip():
         raise ValueError("Adventure must contain text.")
@@ -70,6 +76,14 @@ def parse_result(raw):
         if (not isinstance(result[key], list) or len(result[key]) > 60
                 or any(not isinstance(item, str) or len(item) > 2000 for item in result[key])):
             raise ValueError("Invalid state list: " + key)
+    corrections = result.get("corrections", [])
+    if not isinstance(corrections, list) or len(corrections) > 20:
+        raise ValueError("Invalid corrections list.")
+    for correction in corrections:
+        if (not isinstance(correction, dict) or set(correction) != {"old", "new", "evidence"}
+                or any(not isinstance(v, str) or not v.strip() or len(v) > 2000
+                       for v in correction.values())):
+            raise ValueError("Invalid correction.")
     return result
 
 
@@ -109,16 +123,33 @@ class Engine:
             else:
                 world = previous["world"]
                 instruction = request
-            context = {"world": world, "previous_state": previous, "request": instruction}
+            # Historical errors are audit data, not active facts or model context.
+            active_previous = ({k: v for k, v in previous.items()
+                                if k not in {"correction_history", "adventure", "changes"}}
+                               if previous else None)
+            context = {"world": world, "previous_state": active_previous, "request": instruction}
             result = parse_result(self.provider([
                 {"role": "system", "content": SYSTEM},
                 {"role": "user", "content": json.dumps(context, ensure_ascii=False)}]))
             # Preserve canonical facts even if the model accidentally drops them.
-            old_canon = previous["canon"] if previous else []
+            old_canon = list(previous["canon"]) if previous else []
+            history = list(previous.get("correction_history", [])) if previous else []
+            corrections = result.pop("corrections", [])
+            replaced = set()
+            for correction in corrections:
+                old, new, evidence = (correction[k] for k in ("old", "new", "evidence"))
+                if old not in old_canon or old in replaced or evidence not in request:
+                    raise ValueError("Correction lacks a matching fact or quoted GM instruction; state unchanged.")
+                old_canon[old_canon.index(old)] = new
+                replaced.add(old)
+                history.append({**correction, "turn": (previous["turn"] if previous else 0) + 1})
+            superseded = {item["old"] for item in history}
+            result["canon"] = [fact for fact in result["canon"] if fact not in superseded]
             result["canon"] = list(dict.fromkeys(old_canon + result["canon"]))
             if len(result["canon"]) > 60:
                 raise ValueError("Canon limit reached. Export and start a new chapter.")
-            result.update(world=world, turn=(previous["turn"] if previous else 0) + 1)
+            result.update(world=world, turn=(previous["turn"] if previous else 0) + 1,
+                          correction_history=history)
             conn.execute("INSERT OR REPLACE INTO sessions VALUES (?,?,?)",
                          (owner, session, json.dumps(result, ensure_ascii=False)))
         return result
