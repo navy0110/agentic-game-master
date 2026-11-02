@@ -13,7 +13,11 @@ from agm.engine import Engine, render_status, normalize_message
 load_dotenv()
 if not os.getenv("AGENT_SEED") or not os.getenv("ASI_ONE_API_KEY"):
     raise RuntimeError("Configure AGENT_SEED and ASI_ONE_API_KEY in your local .env.")
-engine = Engine()
+if os.getenv("AGM_STORAGE_URL"):
+    from agm.cloud_storage import CloudEngine
+    engine = CloudEngine()
+else:
+    engine = Engine()
 generation_slots = asyncio.Semaphore(4)
 agent = Agent(name="Agentic Game Master", seed=os.environ["AGENT_SEED"],
               port=int(os.getenv("AGENT_PORT", "8001")), mailbox=True,

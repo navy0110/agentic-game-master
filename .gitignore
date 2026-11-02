@@ -5,3 +5,8 @@ __pycache__/
 data/
 *.db
 ***.log
+node_modules/
+.wrangler/
+.dev.vars
+cloudflare/.dev.vars
+build/

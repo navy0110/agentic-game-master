@@ -1,0 +1,12 @@
+{
+  "name": "agentic-game-master",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "cf:check": "wrangler deploy --dry-run --outdir build/worker",
+    "cf:login": "wrangler login",
+    "cf:deploy": "wrangler deploy",
+    "test:storage": "node cloudflare/storage.test.mjs"
+  },
+  "devDependencies": {"wrangler": "^4.0.0"}
+}

@@ -1,5 +1,8 @@
 # Agentic Game Master
 
+Cloudflare hosting preparation is in [cloudflare/DEPLOY.md](cloudflare/DEPLOY.md).
+It is not deployed; the container stays disabled until explicitly enabled.
+
 A world-aware Game Master agent for developers and tabletop GMs. Bring a world
 brief, hire the agent to prepare a playable quest, and continue the story from
 player decisions. Campaign canon and consequences persist in SQLite.

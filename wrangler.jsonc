@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agentic-game-master",
+  "main": "cloudflare/worker.mjs",
+  "compatibility_date": "2026-11-02",
+  "workers_dev": true,
+  "observability": {"enabled": true},
+  "containers": [{
+    "class_name": "GameMasterRuntime",
+    "scheduling_policy": "durable_object",
+    "images": {"base": {"dockerfile": "./Dockerfile"}}
+  }],
+  "durable_objects": {"bindings": [
+    {"name": "RUNTIME", "class_name": "GameMasterRuntime"},
+    {"name": "CAMPAIGNS", "class_name": "CampaignStore"}
+  ]},
+  "migrations": [{"tag": "v1", "new_sqlite_classes": ["GameMasterRuntime", "CampaignStore"]}],
+  "vars": {"AGM_ENABLED": "false", "AGM_PUBLIC_URL": "", "ASI_ONE_MODEL": "asi1"},
+  "triggers": {"crons": ["* * * * *"]}
+}

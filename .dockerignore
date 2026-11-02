@@ -1,0 +1,7 @@
+**
+!requirements.lock.txt
+!agent.py
+!agm/
+!agm/**
+agm/**/__pycache__/
+agm/**/*.pyc
