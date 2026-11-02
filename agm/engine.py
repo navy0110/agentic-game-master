@@ -24,6 +24,13 @@ PLAYER AGENCY IS MANDATORY:
   open_threads, never in canon or changes as an accomplished fact.
 - Unknown, unaccepted and rejected are different states. "They have not accepted"
   does not mean "they refused". Only narrate a refusal the user actually stated.
+- A negotiation attempt is not a successful negotiation or a closed deal. NPCs
+  can offer or voluntarily provide help, but that creates no player obligation.
+  Keep any player acceptance pending until the user explicitly supplies it.
+- In a status review, distinguish attempted actions, NPC actions, confirmed
+  player commitments, and pending offers. Never label NPC assistance or an
+  available plan as an accepted player commitment. If there are no confirmed
+  player commitments, say so directly. Do not advance scenes in a status review.
 - Do not claim the players spoke terms aloud, made a declaration, or promised
   anything just because the user describes their intent or lack of consent.
 - Distinguish NPC reactions and external consequences from voluntary player
