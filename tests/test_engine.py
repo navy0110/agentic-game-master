@@ -2,7 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from agm.engine import Engine, render_status
+from agm.engine import Engine, render_status, normalize_message
 
 
 class CampaignTests(unittest.TestCase):
@@ -114,6 +114,15 @@ class CampaignTests(unittest.TestCase):
         self.assertIn("Find the missing bell", text)
         self.assertEqual(len(self.contexts), 1)
         self.assertEqual(engine.get("alice", "one"), before)
+
+    def test_asi_mentions_preserve_command_and_story_content(self):
+        address = "agent1example"
+        self.assertEqual(normalize_message("@agent1example /status", address), "/status")
+        self.assertEqual(normalize_message("@agent1example\n/export", address), "/export")
+        self.assertEqual(normalize_message(" /help ", address), "/help")
+        self.assertEqual(normalize_message("@agent1other /status", address), "@agent1other /status")
+        self.assertEqual(normalize_message("@agent1examplex /status", address), "@agent1examplex /status")
+        self.assertEqual(normalize_message("Mention @agent1example in the story", address), "Mention @agent1example in the story")
 
 
 if __name__ == "__main__":

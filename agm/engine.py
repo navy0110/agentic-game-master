@@ -173,6 +173,14 @@ class Engine:
         return result
 
 
+def normalize_message(text, agent_address):
+    text = text.strip()
+    mention = "@" + agent_address
+    if text.startswith(mention) and (len(text) == len(mention) or text[len(mention)].isspace()):
+        text = text[len(mention):].strip()
+    return text
+
+
 def render_status(state):
     if not state:
         return "No campaign in this conversation yet. Describe your world to begin."

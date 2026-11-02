@@ -8,7 +8,7 @@ from uagents import Agent, Context, Protocol
 from uagents_core.contrib.protocols.chat import (
     ChatAcknowledgement, ChatMessage, TextContent, chat_protocol_spec,
 )
-from agm.engine import Engine, render_status
+from agm.engine import Engine, render_status, normalize_message
 
 load_dotenv()
 if not os.getenv("AGENT_SEED") or not os.getenv("ASI_ONE_API_KEY"):
@@ -25,6 +25,7 @@ async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
     await ctx.send(sender, ChatAcknowledgement(timestamp=datetime.now(timezone.utc),
                                               acknowledged_msg_id=msg.msg_id))
     text = "\n".join(item.text for item in msg.content if isinstance(item, TextContent)).strip()
+    text = normalize_message(text, agent.address)
     session = str(ctx.session)
     try:
         if not text:
@@ -38,7 +39,9 @@ async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
                      "For a correction, explicitly state what was wrong and the correct fact. "
                      "A new protocol session starts a separate campaign.")
         elif text.lower() == "/status":
-            reply = render_status(await asyncio.to_thread(engine.get, sender, session))
+            state = await asyncio.to_thread(engine.get, sender, session)
+            reply = render_status(state)
+            ctx.logger.info("Read-only /status served; saved turn=%s; no model call", state["turn"] if state else 0)
         elif text.lower().startswith("/") and text.lower() != "/export":
             reply = "Unknown command. Send /help to see available commands. Your campaign is unchanged."
         elif text.lower() == "/export":
