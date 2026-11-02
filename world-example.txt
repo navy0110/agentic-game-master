@@ -1,0 +1,8 @@
+Create a 20-minute adventure in English for two level-one heroes.
+World: A ruined coastal town powered by lighthouse crystals.
+Immutable rules: no resurrection; magic consumes memories; NPCs cannot know private player decisions.
+Locations: the harbor, the lighthouse, the flooded archive.
+NPC: Iona, an archivist who wants to preserve the town's history.
+Current situation: the lighthouse stopped working and a supply boat arrives tonight.
+Tone: hopeful mystery. No graphic violence. Use system-neutral mechanics.
+Deliver a quest, NPC dialogue, an event and meaningful success/failure consequences.
