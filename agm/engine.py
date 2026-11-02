@@ -2,6 +2,7 @@ import json
 import os
 import sqlite3
 import urllib.request
+from contextlib import contextmanager
 from pathlib import Path
 
 SYSTEM = """You are Agentic Game Master, a hired game-master agent for game developers
@@ -63,8 +64,14 @@ class Engine:
         with self.connect() as conn:
             conn.execute("CREATE TABLE IF NOT EXISTS sessions (owner TEXT, id TEXT, state TEXT, PRIMARY KEY(owner,id))")
 
+    @contextmanager
     def connect(self):
-        return sqlite3.connect(self.db, timeout=30)
+        conn = sqlite3.connect(self.db, timeout=30)
+        try:
+            with conn:
+                yield conn
+        finally:
+            conn.close()
 
     def get(self, owner, session):
         with self.connect() as conn:
