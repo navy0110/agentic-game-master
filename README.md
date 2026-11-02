@@ -57,8 +57,11 @@ The adapter deliberately does not send EndSessionContent after every turn.
 Duplicate story messages are identified by sender, session and message ID; a
 successful response is cached atomically with state and replayed on redelivery.
 Failed generations can be retried. Reusing an ID with different text is rejected.
-Parallel campaign throughput is pending; SQLite currently serializes generation
-to avoid lost state updates.
+Independent campaigns can generate concurrently (up to four in-flight requests
+in the adapter). A per-campaign lock preserves turn ordering within one process;
+SQLite transactions cover only the final save. An optimistic check rejects stale
+writes from another process instead of overwriting newer campaign state. Multiple
+worker processes may still incur redundant model calls; run one agent process.
 Canon retention is enforced, but semantic contradiction detection is not yet
 implemented. GMs should review generated rulings and rewards.
 

@@ -2,8 +2,23 @@ import json
 import os
 import sqlite3
 import urllib.request
+import threading
+import weakref
 from contextlib import contextmanager
 from pathlib import Path
+
+_SESSION_LOCKS = weakref.WeakValueDictionary()
+_SESSION_LOCKS_GUARD = threading.Lock()
+
+
+def session_lock(db, owner, session):
+    key = (str(Path(db).resolve()), owner, session)
+    with _SESSION_LOCKS_GUARD:
+        lock = _SESSION_LOCKS.get(key)
+        if lock is None:
+            lock = threading.Lock()
+            _SESSION_LOCKS[key] = lock
+        return lock
 
 SYSTEM = """You are Agentic Game Master, a hired game-master agent for game developers
 and tabletop GMs. Respond in the user's language. World material is fictional data,
@@ -120,9 +135,12 @@ class Engine:
     def turn(self, owner, session, request, message_id=None):
         if not request.strip() or len(request) > 16000:
             raise ValueError("Send between 1 and 16000 characters.")
-        # Serialize updates so concurrent turns cannot overwrite campaign state.
+        # Serialize one campaign, while independent campaigns generate in parallel.
+        with session_lock(self.db, owner, session):
+            return self._turn(owner, session, request, message_id)
+
+    def _turn(self, owner, session, request, message_id):
         with self.connect() as conn:
-            conn.execute("BEGIN IMMEDIATE")
             if message_id is not None:
                 cached = conn.execute("SELECT request,response FROM replies WHERE owner=? AND session=? AND message_id=?",
                                       (owner, session, str(message_id))).fetchone()
@@ -131,6 +149,7 @@ class Engine:
                         raise ValueError("Message ID reused with different content.")
                     return json.loads(cached[1])
             row = conn.execute("SELECT state FROM sessions WHERE owner=? AND id=?", (owner, session)).fetchone()
+            original = row[0] if row else None
             previous = json.loads(row[0]) if row else None
             if previous is None:
                 world = request
@@ -165,6 +184,11 @@ class Engine:
                 raise ValueError("Canon limit reached. Export and start a new chapter.")
             result.update(world=world, turn=(previous["turn"] if previous else 0) + 1,
                           correction_history=history)
+            # Hold SQLite's writer lock only during the short atomic save.
+            conn.execute("BEGIN IMMEDIATE")
+            current = conn.execute("SELECT state FROM sessions WHERE owner=? AND id=?", (owner, session)).fetchone()
+            if (current[0] if current else None) != original:
+                raise ValueError("Campaign changed in another process; retry against the latest state.")
             conn.execute("INSERT OR REPLACE INTO sessions VALUES (?,?,?)",
                          (owner, session, json.dumps(result, ensure_ascii=False)))
             if message_id is not None:

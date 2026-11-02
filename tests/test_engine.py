@@ -1,6 +1,8 @@
 import json
 import tempfile
 import unittest
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from agm.engine import Engine, render_status, normalize_message
 
@@ -123,6 +125,39 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(normalize_message("@agent1other /status", address), "@agent1other /status")
         self.assertEqual(normalize_message("@agent1examplex /status", address), "@agent1examplex /status")
         self.assertEqual(normalize_message("Mention @agent1example in the story", address), "Mention @agent1example in the story")
+
+    def test_independent_campaigns_generate_in_parallel(self):
+        barrier = threading.Barrier(2)
+        def parallel_provider(messages):
+            barrier.wait(timeout=5)
+            return self.provider(messages)
+        engine = Engine(self.db, parallel_provider)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures = [pool.submit(engine.turn, owner, "one", "World", "first")
+                       for owner in ("alice", "bob")]
+            states = [f.result(timeout=10) for f in futures]
+        self.assertEqual([s["turn"] for s in states], [1, 1])
+
+    def test_simultaneous_duplicate_is_generated_once_across_engines(self):
+        entered = threading.Event()
+        release = threading.Event()
+        calls = []
+        def slow_provider(messages):
+            calls.append(1)
+            entered.set()
+            if not release.wait(timeout=5):
+                raise TimeoutError("test synchronization failed")
+            return self.provider(messages)
+        engine = Engine(self.db, slow_provider)
+        other = Engine(self.db, slow_provider)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            first = pool.submit(engine.turn, "alice", "one", "World", "same")
+            self.assertTrue(entered.wait(timeout=5))
+            duplicate = pool.submit(other.turn, "alice", "one", "World", "same")
+            release.set()
+            self.assertEqual(first.result(timeout=10), duplicate.result(timeout=10))
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(engine.get("alice", "one")["turn"], 1)
 
 
 if __name__ == "__main__":

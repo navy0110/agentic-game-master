@@ -14,9 +14,10 @@ load_dotenv()
 if not os.getenv("AGENT_SEED") or not os.getenv("ASI_ONE_API_KEY"):
     raise RuntimeError("Configure AGENT_SEED and ASI_ONE_API_KEY in your local .env.")
 engine = Engine()
+generation_slots = asyncio.Semaphore(4)
 agent = Agent(name="Agentic Game Master", seed=os.environ["AGENT_SEED"],
               port=int(os.getenv("AGENT_PORT", "8001")), mailbox=True,
-              publish_agent_details=True)
+              publish_agent_details=True, handle_messages_concurrently=True)
 protocol = Protocol(spec=chat_protocol_spec)
 
 
@@ -49,7 +50,8 @@ async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
             state = await asyncio.to_thread(engine.get, sender, session)
             reply = json.dumps(state, ensure_ascii=False, indent=2) if state else "No campaign in this session yet."
         else:
-            result = await asyncio.to_thread(engine.turn, sender, session, text, str(msg.msg_id))
+            async with generation_slots:
+                result = await asyncio.to_thread(engine.turn, sender, session, text, str(msg.msg_id))
             reply = result["adventure"] + "\n\nConsequences: " + "; ".join(result["changes"])
     except Exception:
         ctx.logger.error("Campaign request failed; check model availability and local configuration.")
