@@ -2,7 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from agm.engine import Engine
+from agm.engine import Engine, render_status
 
 
 class CampaignTests(unittest.TestCase):
@@ -83,6 +83,36 @@ class CampaignTests(unittest.TestCase):
             "new": "Magic is free", "evidence": "Correction: magic is free"}]})
         with self.assertRaises(ValueError):
             engine.turn("alice", "one", "Go to the harbor")
+        self.assertEqual(engine.get("alice", "one"), before)
+
+    def test_duplicate_delivery_after_restart_does_not_generate_twice(self):
+        engine = Engine(self.db, self.provider)
+        first = engine.turn("alice", "one", "World", "message-1")
+        restarted = Engine(self.db, self.provider)
+        replay = restarted.turn("alice", "one", "World", "message-1")
+        self.assertEqual(replay, first)
+        self.assertEqual(len(self.contexts), 1)
+        self.assertEqual(restarted.get("alice", "one")["turn"], 1)
+        with self.assertRaises(ValueError):
+            restarted.turn("alice", "one", "Different content", "message-1")
+        second = restarted.turn("alice", "one", "Continue", "message-2")
+        self.assertEqual(second["turn"], 2)
+
+    def test_failed_message_can_be_retried(self):
+        engine = Engine(self.db, lambda messages: "invalid json")
+        with self.assertRaises(ValueError):
+            engine.turn("alice", "one", "World", "retry-1")
+        engine.provider = self.provider
+        state = engine.turn("alice", "one", "World", "retry-1")
+        self.assertEqual(state["turn"], 1)
+
+    def test_status_does_not_advance_or_invoke_model(self):
+        engine = Engine(self.db, self.provider)
+        before = engine.turn("alice", "one", "World")
+        text = render_status(engine.get("alice", "one"))
+        self.assertIn("Magic costs memories", text)
+        self.assertIn("Find the missing bell", text)
+        self.assertEqual(len(self.contexts), 1)
         self.assertEqual(engine.get("alice", "one"), before)
 
 

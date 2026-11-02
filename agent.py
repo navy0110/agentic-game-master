@@ -8,7 +8,7 @@ from uagents import Agent, Context, Protocol
 from uagents_core.contrib.protocols.chat import (
     ChatAcknowledgement, ChatMessage, TextContent, chat_protocol_spec,
 )
-from agm.engine import Engine
+from agm.engine import Engine, render_status
 
 load_dotenv()
 if not os.getenv("AGENT_SEED") or not os.getenv("ASI_ONE_API_KEY"):
@@ -29,12 +29,24 @@ async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
     try:
         if not text:
             reply = "Describe your world, its rules, and the adventure you want to run."
+        elif text.lower() == "/help":
+            reply = ("Agentic Game Master\nDescribe your world, rules and desired adventure to start. "
+                     "Continue with player decisions in this conversation.\n"
+                     "/status — read saved facts and open threads without advancing the story\n"
+                     "/export — export this campaign as JSON\n"
+                     "/help — show these commands\n"
+                     "For a correction, explicitly state what was wrong and the correct fact. "
+                     "A new protocol session starts a separate campaign.")
+        elif text.lower() == "/status":
+            reply = render_status(await asyncio.to_thread(engine.get, sender, session))
+        elif text.lower().startswith("/") and text.lower() != "/export":
+            reply = "Unknown command. Send /help to see available commands. Your campaign is unchanged."
         elif text.lower() == "/export":
             import json
             state = await asyncio.to_thread(engine.get, sender, session)
             reply = json.dumps(state, ensure_ascii=False, indent=2) if state else "No campaign in this session yet."
         else:
-            result = await asyncio.to_thread(engine.turn, sender, session, text)
+            result = await asyncio.to_thread(engine.turn, sender, session, text, str(msg.msg_id))
             reply = result["adventure"] + "\n\nConsequences: " + "; ".join(result["changes"])
     except Exception:
         ctx.logger.error("Campaign request failed; check model availability and local configuration.")

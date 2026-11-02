@@ -101,6 +101,7 @@ class Engine:
         self.provider = provider or ASIProvider()
         with self.connect() as conn:
             conn.execute("CREATE TABLE IF NOT EXISTS sessions (owner TEXT, id TEXT, state TEXT, PRIMARY KEY(owner,id))")
+            conn.execute("CREATE TABLE IF NOT EXISTS replies (owner TEXT, session TEXT, message_id TEXT, request TEXT, response TEXT, PRIMARY KEY(owner,session,message_id))")
 
     @contextmanager
     def connect(self):
@@ -116,12 +117,19 @@ class Engine:
             row = conn.execute("SELECT state FROM sessions WHERE owner=? AND id=?", (owner, session)).fetchone()
         return json.loads(row[0]) if row else None
 
-    def turn(self, owner, session, request):
+    def turn(self, owner, session, request, message_id=None):
         if not request.strip() or len(request) > 16000:
             raise ValueError("Send between 1 and 16000 characters.")
         # Serialize updates so concurrent turns cannot overwrite campaign state.
         with self.connect() as conn:
             conn.execute("BEGIN IMMEDIATE")
+            if message_id is not None:
+                cached = conn.execute("SELECT request,response FROM replies WHERE owner=? AND session=? AND message_id=?",
+                                      (owner, session, str(message_id))).fetchone()
+                if cached:
+                    if cached[0] != request:
+                        raise ValueError("Message ID reused with different content.")
+                    return json.loads(cached[1])
             row = conn.execute("SELECT state FROM sessions WHERE owner=? AND id=?", (owner, session)).fetchone()
             previous = json.loads(row[0]) if row else None
             if previous is None:
@@ -159,4 +167,18 @@ class Engine:
                           correction_history=history)
             conn.execute("INSERT OR REPLACE INTO sessions VALUES (?,?,?)",
                          (owner, session, json.dumps(result, ensure_ascii=False)))
+            if message_id is not None:
+                conn.execute("INSERT INTO replies VALUES (?,?,?,?,?)",
+                             (owner, session, str(message_id), request, json.dumps(result, ensure_ascii=False)))
         return result
+
+
+def render_status(state):
+    if not state:
+        return "No campaign in this conversation yet. Describe your world to begin."
+    # Exact stored facts, no model interpretation and no advancement of the story.
+    canon = "\n".join("- " + fact for fact in state["canon"]) or "- None yet."
+    pending = "\n".join("- " + fact for fact in state["open_threads"]) or "- None yet."
+    return (f"# Campaign status · turn {state['turn']}\n\n"
+            f"## Recorded facts\n{canon}\n\n## Open threads and proposals\n{pending}\n\n"
+            "Read-only snapshot. No story advancement or model call.")

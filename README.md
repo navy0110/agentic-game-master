@@ -48,12 +48,17 @@ They do not validate model creativity or prove live Agentverse compatibility.
    process online. Follow current Agentverse onboarding for external agents.
 4. Open its profile and test through ASI:One. Start with the example world brief.
 5. Send a player decision in the same conversation. `/export` returns its state.
+   `/status` reads saved facts and open threads without a model call or story
+   advancement. `/help` lists the commands. Unknown commands leave state unchanged.
 
 Storage is scoped by sender address AND protocol session. A new session starts
 a new campaign. Cross-device/session campaign sharing is not implemented.
 The adapter deliberately does not send EndSessionContent after every turn.
-Duplicate-message protection and parallel campaign throughput are pending;
-SQLite currently serializes generation to avoid lost state updates.
+Duplicate story messages are identified by sender, session and message ID; a
+successful response is cached atomically with state and replayed on redelivery.
+Failed generations can be retried. Reusing an ID with different text is rejected.
+Parallel campaign throughput is pending; SQLite currently serializes generation
+to avoid lost state updates.
 Canon retention is enforced, but semantic contradiction detection is not yet
 implemented. GMs should review generated rulings and rewards.
 
