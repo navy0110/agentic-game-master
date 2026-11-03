@@ -1,5 +1,6 @@
 [agent]
   address = "agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5"
   include = ""
-  readme_path = "README.md"
-  description = "Generate playable quests, NPCs and dynamic events for your world. Continue from player decisions with persistent canon."
+  readme_path = "LISTING.md"
+  description = "A Game Master for tabletop GMs and RPG developers: create quests, NPCs and dynamic events for your world, then continue from player choices with saved campaign context."
+  starter_prompts = ["Create a 10-minute quest for my world; ask me for its rules first.", "Generate an NPC and an event that fit my world lore.", "/help"]
