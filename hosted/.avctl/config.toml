@@ -1,0 +1,5 @@
+[agent]
+  address = "agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5"
+  include = ""
+  readme_path = "README.md"
+  description = "Generate playable quests, NPCs and dynamic events for your world. Continue from player decisions with persistent canon."

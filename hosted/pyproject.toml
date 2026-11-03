@@ -1,0 +1,6 @@
+[project]
+name = "agentic-game-master"
+version = "0.1.0"
+description = "World-aware Game Master: playable quests, NPCs and events with persistent canon and player-controlled decisions."
+requires-python = ">=3.10"
+dependencies = ["uagents", "requests"]

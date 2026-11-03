@@ -44,8 +44,11 @@ test; don't claim history was migrated until its storage mapping is verified.
 
 ## Status
 
-Prepared and locally tested, not yet deployed to Agentverse. Confirm compilation,
-runtime imports, quotas and a real ASI:One round trip before sharing the new link.
+Deployed 2026-11-03 to Agentverse Hosted Agents:
+`agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5`.
+AVCTL confirms compiled=true, running=true; logs confirm successful startup and
+Almanac fast-track registration. Real ASI:One inference, persistent storage across
+hosted invocations/restarts and account model quota remain to be verified.
 
 ## Official references
 

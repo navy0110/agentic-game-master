@@ -1,7 +1,8 @@
 # Agentic Game Master
 
-Cloudflare hosting preparation is in [cloudflare/DEPLOY.md](cloudflare/DEPLOY.md).
-It is not deployed; the container stays disabled until explicitly enabled.
+The current hosting target is [Agentverse Hosted Agents](hosted/README.md).
+The hosted agent is compiled and running; end-to-end hosted chat tests are pending.
+Cloudflare remains an optional, undeployed alternative in [cloudflare/DEPLOY.md](cloudflare/DEPLOY.md).
 
 A world-aware Game Master agent for developers and tabletop GMs. Bring a world
 brief, hire the agent to prepare a playable quest, and continue the story from
@@ -10,8 +11,9 @@ player decisions. Campaign canon and consequences persist in SQLite.
 ## Status
 
 Initial implementation: CLI, ASI:One model adapter, campaign storage, JSON export,
-and an Agentverse Chat Protocol adapter. Not deployed. Real ASI inference and
-Agentverse message delivery still require credentials and live verification.
+and an Agentverse Chat Protocol adapter. Local ASI inference, mailbox message
+delivery and continuation were verified. The separate Hosted build is deployed;
+its model inference and persistence still require live verification.
 No web interface or live game engine integration yet. No Memeria code is included.
 
 ## Local setup (PowerShell, Python 3.10+)
