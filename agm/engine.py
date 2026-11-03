@@ -214,3 +214,14 @@ def render_status(state):
     return (f"# Campaign status · turn {state['turn']}\n\n"
             f"## Recorded facts\n{canon}\n\n## Open threads and proposals\n{pending}\n\n"
             "Read-only snapshot. No story advancement or model call.")
+
+
+def render_player_status(state):
+    if not state:
+        return "No campaign in this conversation yet. Describe your world to begin."
+    # Fail closed: story facts, hooks, and even NPC identities may contain spoilers.
+    return (f"# Campaign status · turn {state['turn']}\n\n"
+            f"Saved facts: {len(state['canon'])}. Open threads: {len(state['open_threads'])}.\n\n"
+            "Story details are hidden in this spoiler-safe view. "
+            "If you are preparing the session as GM, use /gm-status for the full record.\n\n"
+            "Read-only snapshot. No story advancement or model call.")

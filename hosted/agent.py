@@ -89,6 +89,16 @@ def render_status(state):
             f"## Recorded facts\n{canon}\n\n## Open threads and proposals\n{pending}\n\n"
             "Read-only snapshot. No story advancement or model call.")
 
+def render_player_status(state):
+    if not state:
+        return "No campaign in this conversation yet. Describe your world to begin."
+    # Fail closed: story facts, hooks, and even NPC identities may contain spoilers.
+    return (f"# Campaign status · turn {state['turn']}\n\n"
+            f"Saved facts: {len(state['canon'])}. Open threads: {len(state['open_threads'])}.\n\n"
+            "Story details are hidden in this spoiler-safe view. "
+            "If you are preparing the session as GM, use /gm-status for the full record.\n\n"
+            "Read-only snapshot. No story advancement or model call.")
+
 def advance_state(previous, request, provider):
     if previous is None:
         world = request
@@ -137,12 +147,15 @@ def process_request(storage, owner, session, message_id, text, address, provider
         return 'Describe your world, rules, characters, and desired adventure to begin.'
     if text.lower() == '/help':
         return ('Agentic Game Master\nDescribe a world to begin; send player decisions to continue.\n'
-                '/status: read recorded facts, without advancing the story\n'
-                '/export: export the campaign as JSON\n'
+                '/status: spoiler-safe campaign summary, without advancing the story\n'
+                '/gm-status: full GM record, INCLUDING SECRETS\n'
+                '/export: full campaign JSON, INCLUDING SECRETS\n'
                 '/help: show commands\n'
                 'Explicitly identify incorrect facts when requesting a correction. '
                 'A new conversation/session starts a separate campaign.')
     if text.lower() == '/status':
+        return render_player_status(state)
+    if text.lower() == '/gm-status':
         return render_status(state)
     if text.lower() == '/export':
         return json.dumps(state, ensure_ascii=False, indent=2) if state else 'No campaign yet.'
@@ -205,6 +218,13 @@ if not globals().get('_AGM_TEST_MODE', False):
         try:
             reply = process_request(ctx.storage, sender, str(ctx.session), str(msg.msg_id),
                                     text, agent.address, hosted_model)
+            clean = normalize_message(text, agent.address).lower()
+            if clean in {'/status', '/gm-status'}:
+                key = 'agm:v1:' + hashlib.sha256(json.dumps([sender, str(ctx.session)]).encode()).hexdigest()
+                stored = ctx.storage.get(key)
+                snapshot = json.loads(stored) if isinstance(stored, str) else stored
+                turn = snapshot['state']['turn'] if snapshot and snapshot.get('state') else 0
+                ctx.logger.info('Read-only status served; turn=%s; model_call=false', turn)
         except Exception as exc:
             # Never log provider payloads, API keys, or user campaign data.
             ctx.logger.error('Campaign failed (%s); check hosted logs/quotas.', type(exc).__name__)

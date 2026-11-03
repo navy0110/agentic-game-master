@@ -8,7 +8,7 @@ from uagents import Agent, Context, Protocol
 from uagents_core.contrib.protocols.chat import (
     ChatAcknowledgement, ChatMessage, TextContent, chat_protocol_spec,
 )
-from agm.engine import Engine, render_status, normalize_message
+from agm.engine import Engine, render_status, render_player_status, normalize_message
 
 load_dotenv()
 if not os.getenv("AGENT_SEED") or not os.getenv("ASI_ONE_API_KEY"):
@@ -38,14 +38,15 @@ async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
         elif text.lower() == "/help":
             reply = ("Agentic Game Master\nDescribe your world, rules and desired adventure to start. "
                      "Continue with player decisions in this conversation.\n"
-                     "/status — read saved facts and open threads without advancing the story\n"
-                     "/export — export this campaign as JSON\n"
+                     "/status — spoiler-safe campaign summary\n"
+                     "/gm-status — full record INCLUDING SECRETS\n"
+                     "/export — full campaign JSON INCLUDING SECRETS\n"
                      "/help — show these commands\n"
                      "For a correction, explicitly state what was wrong and the correct fact. "
                      "A new protocol session starts a separate campaign.")
-        elif text.lower() == "/status":
+        elif text.lower() in {"/status", "/gm-status"}:
             state = await asyncio.to_thread(engine.get, sender, session)
-            reply = render_status(state)
+            reply = render_player_status(state) if text.lower() == '/status' else render_status(state)
             ctx.logger.info("Read-only /status served; saved turn=%s; no model call", state["turn"] if state else 0)
         elif text.lower().startswith("/") and text.lower() != "/export":
             reply = "Unknown command. Send /help to see available commands. Your campaign is unchanged."

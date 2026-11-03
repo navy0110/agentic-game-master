@@ -56,3 +56,22 @@ class HostedTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             process(store, 'alice', 'one', 'm2', 'Continue', 'agent1example', lambda messages:'broken')
         self.assertEqual(before, store.values)
+
+    def test_spoiler_safe_status_hides_untagged_secrets_and_hooks(self):
+        store = Storage()
+        process = HOSTED['process_request']
+        def secret_provider(messages):
+            return json.dumps({'adventure': 'A scene',
+                'canon': ['Maren secretly answered the drowned daughter'],
+                'open_threads': ['The Deep Chorus is the missing memories'], 'changes': []})
+        process(store, 'alice', 'one', 'm1', 'World', 'agent1example', secret_provider)
+        before = copy.deepcopy(store.values)
+        def forbidden(messages):
+            raise AssertionError('Status must not call the model')
+        safe = process(store, 'alice', 'one', 'm2', '/status', 'agent1example', forbidden)
+        self.assertNotIn('Maren', safe)
+        self.assertNotIn('Deep Chorus', safe)
+        full = process(store, 'alice', 'one', 'm3', '/gm-status', 'agent1example', forbidden)
+        self.assertIn('Maren', full)
+        self.assertIn('Deep Chorus', full)
+        self.assertEqual(before, store.values)

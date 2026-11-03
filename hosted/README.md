@@ -25,7 +25,11 @@ in your dashboard; do not assume unlimited or paid resources have been enabled.
 
 Campaigns are stored with `ctx.storage.get/set`, scoped by sender AND protocol
 session. One write stores state plus duplicate reply cache. No globals are used
-as campaign storage. /status, /help and /export do not call the model.
+as campaign storage. /status shows only turn and counts, hiding even untagged
+story spoilers. /gm-status and /export include the full record and secrets.
+These are display modes for the campaign owner, NOT separate authenticated GM
+and player roles. All four commands avoid model calls. Do not share /gm-status
+or exports with players who should not see secrets.
 
 This adapter deliberately uses synchronous model requests inside each handler,
 with no await between reading and saving state. Actual hosted invocation ordering
