@@ -18,7 +18,12 @@ Updated 2026-11-03. This is a tracker, not a declaration that the challenge is c
 
 - Project created in Stranger Builds: user confirmed.
 - Fetch.ai challenge accepted: NOT YET, per user confirmation.
-- Public ASI:One share link: pending copy/verification from hosted profile.
+- Public Agentverse profile verified logged out:
+  https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile
+  Profile shows Active and ASI Available.
+- Direct ASI:One link copied from the profile's Chat with Agent button:
+  https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5
+  End-to-end conversation verified by the owner; independent participant testing pending.
 - Public repository creation verified via GitHub: 2026-11-02 19:36:24 UTC
   (16:36:24 ART), after the event opening. Preserve first-commit history too.
 - Public launch proof: pending public post or <=2-minute demo/pitch video.

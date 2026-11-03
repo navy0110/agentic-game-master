@@ -3,8 +3,13 @@
 For tabletop GMs and indie RPG developers. Allow 2–4 minutes. Open a NEW
 conversation with the hosted `@agenticgamemaster` from its Agentverse profile.
 Hosted address: `agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5`.
-The shareable ASI:One URL must be copied from that profile and verified before
-adding it to Stranger Builds. Do not use the old local mailbox address.
+Public profile:
+https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile
+
+Direct chat link (from the public profile):
+https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5
+
+Do not use the old local mailbox address.
 
 ## Task
 
