@@ -86,10 +86,10 @@ if not globals().get('_AGM_TEST_MODE', False):
                 stored = ctx.storage.get(key)
                 snapshot = json.loads(stored) if isinstance(stored, str) else stored
                 turn = snapshot['state']['turn'] if snapshot and snapshot.get('state') else 0
-                ctx.logger.info('Read-only status served; turn=%s; model_call=false', turn)
+                ctx.logger.info(f'Read-only status served; turn={turn}; model_call=false')
         except Exception as exc:
             # Never log provider payloads, API keys, or user campaign data.
-            ctx.logger.error('Campaign failed (%s); check hosted logs/quotas.', type(exc).__name__)
+            ctx.logger.error(f'Campaign failed ({type(exc).__name__}); check hosted logs/quotas.')
             reply = ('I could not complete that request. No successful campaign update was confirmed. '
                      'Please retry; use /status to check saved state.')
         await ctx.send(sender, ChatMessage(timestamp=datetime.now(timezone.utc), msg_id=uuid4(),

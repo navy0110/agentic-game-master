@@ -3,6 +3,10 @@ import json
 import runpy
 import tempfile
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
+from datetime import datetime, timezone
+from uuid import uuid4
 from pathlib import Path
 from agm.engine import Engine
 
@@ -75,3 +79,32 @@ class HostedTests(unittest.TestCase):
         self.assertIn('Maren', full)
         self.assertIn('Deep Chorus', full)
         self.assertEqual(before, store.values)
+
+
+class HostedAdapterTests(unittest.IsolatedAsyncioTestCase):
+    async def test_status_uses_hosted_single_argument_logger_and_sends_reply(self):
+        class HostedLogger:
+            def info(self, message):
+                self.message = message
+            def error(self, message):
+                raise AssertionError(message)
+        class ProtocolStub:
+            def __init__(self, **kwargs):
+                pass
+            def on_message(self, model):
+                return lambda handler: handler
+        agent = SimpleNamespace(address='agent1example', include=lambda *args, **kwargs: None)
+        with patch('uagents.Agent', return_value=agent), patch('uagents.Protocol', ProtocolStub):
+            hosted = runpy.run_path(str(ROOT/'hosted/agent.py'))
+        store = Storage()
+        messages = []
+        async def send(sender, message):
+            messages.append(message)
+        ctx = SimpleNamespace(storage=store, session='one', logger=HostedLogger(), send=send)
+        msg = hosted['ChatMessage'](timestamp=datetime.now(timezone.utc), msg_id=uuid4(),
+                                   content=[hosted['TextContent'](type='text', text='@agent1example /status')])
+        await hosted['handle_message'](ctx, 'alice', msg)
+        self.assertEqual(len(messages), 2)
+        self.assertIn('No campaign', messages[1].content[0].text)
+        self.assertIn('turn=0', ctx.logger.message)
+
