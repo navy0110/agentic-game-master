@@ -1,0 +1,92 @@
+def process_request(storage, owner, session, message_id, text, address, provider):
+    text = normalize_message(text, address)
+    key = 'agm:v1:' + hashlib.sha256(json.dumps([owner, session]).encode()).hexdigest()
+    saved = storage.get(key)
+    record = json.loads(saved) if isinstance(saved, str) else saved
+    record = record or {'state': None, 'replies': {}}
+    state = record['state']
+    if not text:
+        return 'Describe your world, rules, characters, and desired adventure to begin.'
+    if text.lower() == '/help':
+        return ('Agentic Game Master\nDescribe a world to begin; send player decisions to continue.\n'
+                '/status: read recorded facts, without advancing the story\n'
+                '/export: export the campaign as JSON\n'
+                '/help: show commands\n'
+                'Explicitly identify incorrect facts when requesting a correction. '
+                'A new conversation/session starts a separate campaign.')
+    if text.lower() == '/status':
+        return render_status(state)
+    if text.lower() == '/export':
+        return json.dumps(state, ensure_ascii=False, indent=2) if state else 'No campaign yet.'
+    if text.startswith('/'):
+        return 'Unknown command. Send /help. Your campaign is unchanged.'
+    if len(text) > 16000:
+        raise ValueError('Request too long. Send at most 16000 characters.')
+    fingerprint = hashlib.sha256(text.encode()).hexdigest()
+    cached = record['replies'].get(str(message_id))
+    if cached:
+        if cached['fingerprint'] != fingerprint:
+            raise ValueError('Message ID conflict.')
+        return cached['text']
+    result = advance_state(state, text, provider)
+    reply = result['adventure']
+    if result['changes']:
+        reply += '\n\nConsequences:\n' + '\n'.join('- ' + change for change in result['changes'])
+    record['state'] = result
+    record['replies'][str(message_id)] = {'fingerprint': fingerprint, 'text': reply}
+    encoded = json.dumps(record, ensure_ascii=False)
+    if len(encoded.encode()) > 200000:
+        raise ValueError('Campaign storage limit reached. Export before starting another chapter.')
+    # A single storage write keeps the campaign and duplicate response together.
+    storage.set(key, encoded)
+    return reply
+
+
+# The execution environment injects this flag only in the local test harness.
+if not globals().get('_AGM_TEST_MODE', False):
+    import os
+    import requests
+    from datetime import datetime, timezone
+    from uuid import uuid4
+    from uagents import Agent, Context, Protocol
+    from uagents_core.contrib.protocols.chat import (
+        ChatMessage, ChatAcknowledgement, TextContent, chat_protocol_spec,
+    )
+
+    # Hosted Agent() wraps the platform-provided identity; never pass a seed here.
+    agent = Agent()
+    protocol = Protocol(spec=chat_protocol_spec)
+
+    def hosted_model(messages):
+        key = os.environ.get('ASI1_API_KEY') or os.environ.get('ASI_ONE_API_KEY')
+        base = os.environ.get('ASI1_BASE_URL', 'https://api.asi1.ai/v1').rstrip('/')
+        if not key or not base.startswith('https://'):
+            raise RuntimeError('Hosted ASI credentials are unavailable.')
+        response = requests.post(base + '/chat/completions',
+            headers={'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'},
+            json={'model': 'asi1', 'messages': messages, 'max_tokens': 3000, 'temperature': 0.7},
+            timeout=60)
+        response.raise_for_status()
+        return response.json()['choices'][0]['message']['content']
+
+    @protocol.on_message(ChatMessage)
+    async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
+        await ctx.send(sender, ChatAcknowledgement(timestamp=datetime.now(timezone.utc),
+                                                  acknowledged_msg_id=msg.msg_id))
+        text = '\n'.join(item.text for item in msg.content if isinstance(item, TextContent))
+        try:
+            reply = process_request(ctx.storage, sender, str(ctx.session), str(msg.msg_id),
+                                    text, agent.address, hosted_model)
+        except Exception as exc:
+            # Never log provider payloads, API keys, or user campaign data.
+            ctx.logger.error('Campaign failed (%s); check hosted logs/quotas.', type(exc).__name__)
+            reply = ('I could not complete that request. No successful campaign update was confirmed. '
+                     'Please retry; use /status to check saved state.')
+        await ctx.send(sender, ChatMessage(timestamp=datetime.now(timezone.utc), msg_id=uuid4(),
+                                          content=[TextContent(type='text', text=reply)]))
+
+    @protocol.on_message(ChatAcknowledgement)
+    async def handle_ack(ctx: Context, sender: str, msg: ChatAcknowledgement):
+        pass
+
+    agent.include(protocol, publish_manifest=True)
