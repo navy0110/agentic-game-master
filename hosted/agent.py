@@ -136,16 +136,24 @@ def advance_state(previous, request, provider):
     return result
 
 
-def process_request(storage, owner, session, message_id, text, address, provider):
+def process_request(storage, owner, session, message_id, text, address, provider, audit=None):
+    def emit(event, turn, model_call=False):
+        if audit:
+            try:
+                audit(event, turn, model_call)
+            except Exception:
+                pass  # Diagnostic failure must never prevent a reply or change state.
     text = normalize_message(text, address)
     key = 'agm:v1:' + hashlib.sha256(json.dumps([owner, session]).encode()).hexdigest()
     saved = storage.get(key)
     record = json.loads(saved) if isinstance(saved, str) else saved
     record = record or {'state': None, 'replies': {}}
     state = record['state']
+    turn = state['turn'] if state else 0
     if not text:
         return 'Describe your world, rules, characters, and desired adventure to begin.'
     if text.lower() == '/help':
+        emit('help', turn)
         return ('Agentic Game Master\nDescribe a world to begin; send player decisions to continue.\n'
                 '/status: spoiler-safe campaign summary, without advancing the story\n'
                 '/gm-status: full GM record, INCLUDING SECRETS\n'
@@ -154,12 +162,16 @@ def process_request(storage, owner, session, message_id, text, address, provider
                 'Explicitly identify incorrect facts when requesting a correction. '
                 'A new conversation/session starts a separate campaign.')
     if text.lower() == '/status':
+        emit('status', turn)
         return render_player_status(state)
     if text.lower() == '/gm-status':
+        emit('gm-status', turn)
         return render_status(state)
     if text.lower() == '/export':
+        emit('export', turn)
         return json.dumps(state, ensure_ascii=False, indent=2) if state else 'No campaign yet.'
     if text.startswith('/'):
+        emit('unknown-command', turn)
         return 'Unknown command. Send /help. Your campaign is unchanged.'
     if len(text) > 16000:
         raise ValueError('Request too long. Send at most 16000 characters.')
@@ -168,7 +180,9 @@ def process_request(storage, owner, session, message_id, text, address, provider
     if cached:
         if cached['fingerprint'] != fingerprint:
             raise ValueError('Message ID conflict.')
+        emit('duplicate-replay', turn)
         return cached['text']
+    emit('generation-start', turn, True)
     result = advance_state(state, text, provider)
     reply = result['adventure']
     if result['changes']:
@@ -180,6 +194,7 @@ def process_request(storage, owner, session, message_id, text, address, provider
         raise ValueError('Campaign storage limit reached. Export before starting another chapter.')
     # A single storage write keeps the campaign and duplicate response together.
     storage.set(key, encoded)
+    emit('generation-saved', result['turn'], True)
     return reply
 
 
@@ -215,16 +230,12 @@ if not globals().get('_AGM_TEST_MODE', False):
         await ctx.send(sender, ChatAcknowledgement(timestamp=datetime.now(timezone.utc),
                                                   acknowledged_msg_id=msg.msg_id))
         text = '\n'.join(item.text for item in msg.content if isinstance(item, TextContent))
+        message_tag = hashlib.sha256(str(msg.msg_id).encode()).hexdigest()[:12]
+        def audit(event, turn, model_call):
+            ctx.logger.info(f'AGM event={event}; message={message_tag}; turn={turn}; model_call={str(model_call).lower()}')
         try:
             reply = process_request(ctx.storage, sender, str(ctx.session), str(msg.msg_id),
-                                    text, agent.address, hosted_model)
-            clean = normalize_message(text, agent.address).lower()
-            if clean in {'/status', '/gm-status'}:
-                key = 'agm:v1:' + hashlib.sha256(json.dumps([sender, str(ctx.session)]).encode()).hexdigest()
-                stored = ctx.storage.get(key)
-                snapshot = json.loads(stored) if isinstance(stored, str) else stored
-                turn = snapshot['state']['turn'] if snapshot and snapshot.get('state') else 0
-                ctx.logger.info(f'Read-only status served; turn={turn}; model_call=false')
+                                    text, agent.address, hosted_model, audit)
         except Exception as exc:
             # Never log provider payloads, API keys, or user campaign data.
             ctx.logger.error(f'Campaign failed ({type(exc).__name__}); check hosted logs/quotas.')

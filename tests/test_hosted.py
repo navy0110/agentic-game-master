@@ -108,3 +108,25 @@ class HostedAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('No campaign', messages[1].content[0].text)
         self.assertIn('turn=0', ctx.logger.message)
 
+
+class HostedAuditTests(unittest.TestCase):
+    def test_audit_distinguishes_status_generation_and_duplicate(self):
+        events = []
+        storage = Storage()
+        def provider(messages):
+            return json.dumps({'adventure':'A scene', 'canon':[], 'open_threads':[], 'changes':[]})
+        def audit(*event):
+            events.append(event)
+        process = HOSTED['process_request']
+        process(storage,'a','s','one','World','agent1x',provider,audit)
+        process(storage,'a','s','one','World','agent1x',provider,audit)
+        process(storage,'a','s','two','/status','agent1x',provider,audit)
+        self.assertEqual(events, [('generation-start',0,True),('generation-saved',1,True),
+                                  ('duplicate-replay',1,False),('status',1,False)])
+
+    def test_broken_diagnostic_does_not_block_reply(self):
+        def broken(*args):
+            raise RuntimeError('logger unavailable')
+        reply = HOSTED['process_request'](Storage(),'a','s','one','/help','agent1x',None,broken)
+        self.assertIn('/status',reply)
+
