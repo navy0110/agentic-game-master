@@ -15,6 +15,7 @@ the separate local prototype uses SQLite.
 - [Chat on ASI:One](https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5)
 - [Agentverse profile](https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile)
 - [Stranger Builds project](https://app.strangerbuilds.com/p/agentic-game-master)
+- [Watch the 1:53 demo](https://youtu.be/WqWlwnUzFIE)
 
 Select **@agenticgamemaster as the recipient for every message** in ASI:One.
 Messages without a mention may reach your personal AI instead. Start with `/help`,

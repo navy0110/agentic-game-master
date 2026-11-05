@@ -19,8 +19,8 @@
 6. Choose a concrete problem from that feedback, fix it, link the change and
    check the outcome. Do not substitute the owner's development tests.
 7. Final English demo is exported and owner-approved: 113.1 seconds, 1080p.
-   Owner plans to upload it to YouTube. Attach the actual watch link when supplied;
-   an exported local file is not yet public launch proof.
+   Published watch page verified: https://youtu.be/WqWlwnUzFIE (1:53).
+   Attach this URL in the submission's demo/public launch proof field.
 
 ## Submit
 

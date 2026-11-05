@@ -42,7 +42,9 @@ Updated 2026-11-04. This is a tracker, not a declaration that the challenge is c
   (16:36:24 ART), after the event opening. Preserve first-commit history too.
 - Demo produced locally: videos/agentic-game-master-demo/renders/agentic-game-master-demo.mp4,
   113.1 seconds, English voice/subtitles, 1080p. Encoded-file checks passed.
-  Public launch proof remains pending until the video/post is uploaded and linked.
+  Published demo: https://youtu.be/WqWlwnUzFIE — public watch page verified on
+  November 4, title "Agentic Game Master | Stranger Builds Demo", duration 1:53.
+  Attach this watch URL in the actual submission; submission itself remains pending.
 - Current rules updated November 4 allow team/community changes until submission
   close on November 8, 23:59 ART; older November 3 lock guidance is superseded.
 
@@ -82,8 +84,8 @@ Changes implemented: move blocking hosted processing off the event loop,
 serialize requests per campaign, shorten model network waits, distinguish model
 timeout/unavailability from validation errors, answer greetings without inference,
 and clarify recipient selection and actual capabilities in the public listing.
-The owner reports the final demo has been uploaded to YouTube; its exact watch
-URL has not yet been supplied here. The owner updated the hosted code and confirmed all three Agentverse regression
+The final demo watch page is verified at https://youtu.be/WqWlwnUzFIE.
+The owner updated the hosted code and confirmed all three Agentverse regression
 prompts passed together. An independent retest remains pending. See
 IMPROVEMENT-RECAP.md for the full recap and missing proof links.
 

@@ -10,7 +10,7 @@ integration is claimed. No submission has been sent by the assistant.
 | Public agent | https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile |
 | Trial entry point | https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5 |
 | Source | https://github.com/navy0110/agentic-game-master |
-| Demo | Final 113.1-second MP4 approved; owner confirms YouTube publication, exact URL pending here |
+| Demo / launch proof | https://youtu.be/WqWlwnUzFIE — public watch page checked November 4; title Agentic Game Master \| Stranger Builds Demo, player duration 1:53 |
 | Feedback proof | Owner confirms one original note was submitted through Stranger Builds; attach its actual note/assignment reference. Additional Slack feedback is not yet confirmed as a second platform trial. |
 | Improvement | IMPROVEMENT-RECAP.md; all three automatic regression prompts passed together per owner |
 | Test screenshot | One team proof image with the three-prompt success caption is listed publicly on the project page |
