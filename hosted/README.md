@@ -60,3 +60,7 @@ hosted invocations/restarts and account model quota remain to be verified.
 - https://docs.agentverse.ai/documentation/getting-started/enable-chat-protocol
 - https://docs.agentverse.ai/v-2/documentation/advanced-usages/allowed-imports
 - https://docs.agentverse.ai/documentation/advanced-usages/agentverse-cli
+
+## Separate reviewer (November 5)
+
+The hosted runtime now supports `/review [notes]`, which delegates to the separately deployed AGM Lorekeeper. This is read-only, may include GM secrets, and has an explicit unavailable fallback. Normal generation runs in a worker thread with per-campaign asynchronous locking; the earlier synchronous-handler paragraph above describes the initial version. See [LOREKEEPER.md](../LOREKEEPER.md) for actual deployed addresses, protocol, limits, and live evidence.

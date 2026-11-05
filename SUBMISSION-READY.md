@@ -1,18 +1,22 @@
 # Agentic Game Master — final submission worksheet
 
-Current focus: finish the existing Fetch.ai entry. No second-agent or payment
-integration is claimed. No submission has been sent by the assistant.
+Current focus: finish the existing Fetch.ai entry. A separate Lorekeeper reviewer
+has been deployed and a real inter-agent review received. Payment integration
+is not implemented. No submission has been sent by the assistant.
 
 | Item | Ready to use / remaining action |
 |---|---|
 | Project | https://app.strangerbuilds.com/p/agentic-game-master |
+| Website | https://agentic-game-master.atom139139.workers.dev/ — published and browser-verified November 5; add to the project website field |
 | Challenge | Get your agent hired — Fetch.ai, publicly EN CURSO. Base44 is also open but its completion is not verified. |
 | Public agent | https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile |
 | Trial entry point | https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5 |
 | Source | https://github.com/navy0110/agentic-game-master |
-| Demo / launch proof | https://youtu.be/WqWlwnUzFIE — public watch page checked November 4; title Agentic Game Master \| Stranger Builds Demo, player duration 1:53 |
-| Feedback proof | Owner confirms one original note was submitted through Stranger Builds; attach its actual note/assignment reference. Additional Slack feedback is not yet confirmed as a second platform trial. |
+| Demo / launch proof | https://youtu.be/vDiybBDsA-Q — 56-second submission cut; new embed verified on published landing November 5 |
+| Feedback proof | Screenshot verifies general step 4 LISTO: outside-team feedback plus a change. Fetch.ai card still marks ASI:One-specific trial/change requirement pending; resolve this discrepancy before claiming challenge completion. |
 | Improvement | IMPROVEMENT-RECAP.md; all three automatic regression prompts passed together per owner |
+| Onboarding improvement | Landing explains the workflow and includes three specific copyable prompts; independent retest not yet verified |
+| Support | Owner sent the Fetch.ai status discrepancy to support; awaiting resolution |
 | Test screenshot | One team proof image with the three-prompt success caption is listed publicly on the project page |
 | Team | Public page explicitly lists @navynox and @ivavala |
 | Prior work | Memeria predates the hackathon; this independent new agent is the entry. No Memeria code included. |
@@ -59,3 +63,7 @@ content and full records can reveal secrets. Model availability and latency vary
 Verify actual fields, attach the real proof links/images, and review the complete
 entry before pressing Submit. A project page, local files or a draft do not by
 themselves confirm a submitted entry. Keep the agent available through results.
+
+## Fetch.ai status reported November 5
+
+Owner reports: "Enviá tu proyecto: Fetch.ai lo revisa y tu challenge se completa". This supersedes the earlier pending ASI:One proof message. The next step is submission for sponsor review; final submission and challenge completion have not been confirmed. Use https://asi1.ai/ai/agenticgamemaster as the public trial URL, https://youtu.be/vDiybBDsA-Q as the under-60-second video, and the Cloudflare landing as supporting website. The short ASI:One URL was verified publicly without login; chat requires login.

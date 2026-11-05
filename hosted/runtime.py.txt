@@ -45,6 +45,7 @@ def process_request(storage, owner, session, message_id, text, address, provider
                 '/status: spoiler-safe campaign summary, without advancing the story\n'
                 '/gm-status: full GM record, INCLUDING SECRETS\n'
                 '/export: full campaign JSON, INCLUDING SECRETS\n'
+                '/review [notes]: ask the separate Lorekeeper agent for a read-only GM consistency review; may contain secrets\n'
                 '/help: show commands\n'
                 'Explicitly identify incorrect facts when requesting a correction. '
                 'A new conversation/session starts a separate campaign.')
@@ -102,6 +103,7 @@ if not globals().get('_AGM_TEST_MODE', False):
     # Hosted Agent() wraps the platform-provided identity; never pass a seed here.
     agent = Agent()
     protocol = Protocol(spec=chat_protocol_spec)
+    review_protocol = Protocol(name='AGMLoreReview', version='1.0.0')
     # Keep network I/O off the event loop, but serialize each campaign's writes.
     campaign_locks = weakref.WeakValueDictionary()
 
@@ -155,6 +157,37 @@ if not globals().get('_AGM_TEST_MODE', False):
             raise ValueError('provider-envelope: HTTP body is not JSON') from exc
         return completion_text(result, npc_mode)
 
+    async def request_lore_review(ctx, sender, session, message_id, extra):
+        peer = os.environ.get('LOREKEEPER_ADDRESS') or LOREKEEPER_ADDRESS
+        if not peer or peer == agent.address:
+            return ('Lorekeeper is not configured. Your campaign is unchanged. '
+                    'The operator must deploy the separate reviewer and configure its address.')
+        snapshot = review_snapshot(ctx.storage, sender, session, extra)
+        if snapshot is None:
+            return ('Create an NPC or scene first, then send /review in the same conversation. '
+                    'Or send /review followed by a short rules-and-draft excerpt. '
+                    'This sends the material to Lorekeeper and may include GM secrets.')
+        digest = hashlib.sha256(snapshot.encode()).hexdigest()
+        request_id = str(message_id)
+        reference = hashlib.sha256(request_id.encode()).hexdigest()[:12]
+        ctx.logger.info(f'AGM event=review-sent; reference={reference}; peer={peer}; snapshot={digest[:12]}')
+        try:
+            response, status = await asyncio.wait_for(ctx.send_and_receive(
+                peer, LoreReviewRequest(request_id=request_id, snapshot_json=snapshot),
+                response_type=LoreReviewResponse, timeout=22), timeout=25)
+            ctx.logger.info(f'AGM event=review-delivery; reference={reference}; response_type={type(response).__name__}; delivery={getattr(status, "status", "unknown")}')
+            if (not isinstance(response, LoreReviewResponse) or response.error
+                    or response.request_id != request_id or response.snapshot_hash != digest):
+                raise ValueError('Review response did not match the request.')
+            report = parse_review(response.report_json, snapshot)
+        except Exception as exc:
+            ctx.logger.info(f'AGM event=review-unavailable; reference={reference}; type={type(exc).__name__}')
+            return ('Lorekeeper could not complete a validated review in time. '
+                    'Your existing content and campaign are unchanged; no review is claimed. '
+                    'You can continue playing or retry /review later. Reference: ' + reference)
+        ctx.logger.info(f'AGM event=review-received; reference={reference}; peer={peer}; snapshot={digest[:12]}')
+        return render_review(report, peer, reference)
+
     @protocol.on_message(ChatMessage)
     async def handle_message(ctx: Context, sender: str, msg: ChatMessage):
         await ctx.send(sender, ChatAcknowledgement(timestamp=datetime.now(timezone.utc),
@@ -172,7 +205,12 @@ if not globals().get('_AGM_TEST_MODE', False):
                 lock = asyncio.Lock()
                 campaign_locks[lock_key] = lock
             async with lock:
-                reply = await asyncio.to_thread(process_request, ctx.storage, sender,
+                normalized = normalize_message(text, agent.address)
+                if normalized.split(maxsplit=1)[0:1] == ['/review']:
+                    extra = normalized[len('/review'):].strip()
+                    reply = await request_lore_review(ctx, sender, str(ctx.session), str(msg.msg_id), extra)
+                else:
+                    reply = await asyncio.to_thread(process_request, ctx.storage, sender,
                                         str(ctx.session), str(msg.msg_id), text,
                                         agent.address, provider, audit)
         except Exception as exc:
@@ -207,4 +245,11 @@ if not globals().get('_AGM_TEST_MODE', False):
     async def handle_ack(ctx: Context, sender: str, msg: ChatAcknowledgement):
         pass
 
+    @review_protocol.on_message(LoreReviewResponse)
+    async def handle_unsolicited_review(ctx: Context, sender: str, msg: LoreReviewResponse):
+        # Solicited responses are matched by send_and_receive to peer and session.
+        # Late/unsolicited results must not become story turns or alter storage.
+        ctx.logger.info('AGM event=unsolicited-review-ignored')
+
     agent.include(protocol, publish_manifest=True)
+    agent.include(review_protocol, publish_manifest=True)

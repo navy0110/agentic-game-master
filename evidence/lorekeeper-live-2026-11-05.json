@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-05",
+  "verification_type": "owner-operated hosted integration; not ASI:One user trial",
+  "addresses": {
+    "agm": "agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5",
+    "lorekeeper": "agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya",
+    "probe": "agent1qv6muc5tjh686nu0y46a6f6nnmvhvsxqljj6c60mutvzutxl284u578eskt"
+  },
+  "local_tests_passed": 42,
+  "live_checks": {
+    "help_has_review": true,
+    "npc_has_actual_content": true,
+    "review_received": true,
+    "standalone_detects_conflict": true,
+    "review_read_only": true,
+    "normal_generation_after_review": true
+  },
+  "payment_protocol": false,
+  "external_retest_of_review": "pending",
+  "probe_stopped": true
+}

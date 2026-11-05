@@ -1,6 +1,18 @@
 # Hackathon evidence tracker
 
-Updated 2026-11-04. This is a tracker, not a declaration that the challenge is complete.
+Updated 2026-11-05. This is a tracker, not a declaration that the challenge is complete.
+
+## Public landing and outstanding verification
+
+- Landing: https://agentic-game-master.atom139139.workers.dev/
+- Published by the owner on Cloudflare; browser-verified November 5: page and
+  images load, prompt-copy interaction succeeds, YouTube embed loads, and
+  ASI:One buttons target the existing agent. This check did not run generation.
+- The owner reports sending support the general-feedback versus Fetch.ai-track
+  status discrepancy. Resolution remains pending; no support reply supplied.
+- The landing explains the workflow and offers specific prompts in response to
+  clarity feedback. It is an onboarding improvement, not proof of an external
+  retest, repeat usage, payment, or challenge completion.
 
 ## Verified implementation
 
@@ -49,6 +61,18 @@ Updated 2026-11-04. This is a tracker, not a declaration that the challenge is c
   close on November 8, 23:59 ART; older November 3 lock guidance is superseded.
 
 ## Participant feedback — owner-confirmed platform note
+
+Owner screenshots supplied November 4 provide stronger, but distinct, signals:
+
+- feedbackyopcional.jpg: project step 4, "Recibí feedback, anotá 1 cambio", is
+  LISTO, reviewed by the system at 18:15. It explicitly confirms one outside-team
+  builder trial with feedback plus a recorded change.
+- tracks.jpg: Fetch.ai still says FALTA "1 prueba desde ASI:One con feedback y un
+  cambio". Therefore the general feedback step is verified complete, but the
+  challenge-specific ASI:One requirement remains unresolved in the UI. Do not
+  infer its cause or claim Fetch.ai completion.
+- The growth/repeat-use/payment section is explicitly optional; no revenue or
+  return-usage proof has been supplied.
 
 Rules rechecked on 2026-11-04: the current minimum is ONE outside-team builder's
 written feedback via assigned Trick or Feedback, with tries through ASI:One,
@@ -106,3 +130,25 @@ Do not present them as changes requested by assigned outside participants.
 - Keep the agent available through results on 2026-11-19; check hosting/model quotas.
 
 Official rules: https://strangerbuilds.com/rules
+
+## November 5 update
+
+Owner reports Fetch.ai now requests submission for review instead of the earlier missing-proof message. Challenge completion is not yet confirmed. Public short profile https://asi1.ai/ai/agenticgamemaster verified without login. The 56-second demo https://youtu.be/vDiybBDsA-Q replaces the long demo on the landing; new embed and link verified in the production browser.
+
+## Optional agent collaboration — live technical verification
+
+AGM Lorekeeper is deployed at
+`agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya`.
+The existing AGM delegates `/review` through a typed uAgents request/reply exchange.
+42 local tests pass. A real owner-operated hosted probe passed all six checks:
+help advertises review, complete NPC output, successful saved-scene review,
+standalone contradiction detection, unchanged status before/after review, and
+normal story generation after the review (turn 2).
+
+Proof: [live check summary](evidence/lorekeeper-live-2026-11-05.json),
+[sanitized transport logs](evidence/lorekeeper-transport-2026-11-05.txt),
+[probe source](evidence/lorekeeper-probe.py), and [integration details](LOREKEEPER.md).
+The temporary probe is stopped after verification; AGM and Lorekeeper remain active.
+This is technical team testing, not a real outside user, paid hiring, or a claim
+that Fetch.ai has accepted bonus evidence. Testing the new command from the
+owner's ASI:One chat and an external usability retest remain pending.

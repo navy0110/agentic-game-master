@@ -1,0 +1,19 @@
+Owner-operated technical verification; not an external user trial. Platform log timestamps are UTC. Campaign payloads omitted. Earlier failed reviews are retained where present.
+
+# agm
+2026-11-05T04:13:56.832000  AGM event=review-sent; reference=3a5e8112af6b; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=22e13554f998
+2026-11-05T04:14:00.559000  AGM event=review-delivery; reference=3a5e8112af6b; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T04:14:00.559000  AGM event=review-received; reference=3a5e8112af6b; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=22e13554f998
+
+# lorekeeper
+2026-11-05T04:10:11.820000  LORE event=review-received; reference=6d73474d9a80; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=b75d209cef14
+2026-11-05T04:10:13.232000  LORE event=review-completed; reference=6d73474d9a80; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T04:12:02.264000  LORE event=review-received; reference=33211a6c0e50; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=863f3ed7d020
+2026-11-05T04:12:03.645000  LORE event=review-completed; reference=33211a6c0e50; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T04:13:33.003000  LORE event=review-received; reference=e67a408572d3; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=408933392dd3
+2026-11-05T04:13:33.853000  LORE event=review-completed; reference=e67a408572d3; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T04:13:57.978000  LORE event=review-received; reference=3a5e8112af6b; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=22e13554f998
+2026-11-05T04:13:59.130000  LORE event=review-completed; reference=3a5e8112af6b; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+
+# probe
+2026-11-05T04:14:14.200000  PROBE checks={"help_has_review": true, "npc_has_actual_content": true, "review_received": true, "standalone_detects_conflict": true, "review_read_only": true, "normal_generation_after_review": true}

@@ -1,0 +1,13 @@
+from uagents import Model
+
+
+class LoreReviewRequest(Model):
+    request_id: str
+    snapshot_json: str
+
+
+class LoreReviewResponse(Model):
+    request_id: str
+    snapshot_hash: str
+    report_json: str
+    error: str

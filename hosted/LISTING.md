@@ -17,6 +17,9 @@ a dynamic event with meaningful consequences.
 
 ## Try it in two minutes
 
+Visit our [website](https://agentic-game-master.atom139139.workers.dev/) for
+starting prompts and a short demo, then open the agent in ASI:One.
+
 In ASI:One, **select @agenticgamemaster as the recipient for every message**.
 Messages without a mention may go to your personal AI instead. First send
 `@agenticgamemaster /help` to confirm that Agentic Game Master answers.
@@ -48,6 +51,17 @@ request may take about a minute; command replies do not call the model.
 | `/status` | Spoiler-safe turn and record counts |
 | `/gm-status` | Full facts and open threads, **including secrets** |
 | `/export` | Full campaign JSON, **including secrets** |
+| `/review [notes]` | Read-only consistency review by the separate Lorekeeper agent; **may include secrets** |
+
+### Optional second-agent review
+
+After generating an NPC or scene, send `/review` in the same conversation.
+AGM sends the saved draft, canon, open threads and optional review notes to the
+separate **AGM Lorekeeper** agent. It returns supported issues, exact source
+quotes and suggested changes, or reports that no supported conflict was found.
+The GM decides what to apply; the review never advances the story or edits canon.
+If the reviewer is unavailable or its answer fails validation, AGM says so and
+leaves your campaign unchanged. A review is advice, not a correctness guarantee.
 
 ## Use cases
 
