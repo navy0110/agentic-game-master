@@ -304,9 +304,18 @@ class Engine:
 
 def normalize_message(text, agent_address):
     text = text.strip()
-    mention = "@" + agent_address
-    if text.startswith(mention) and (len(text) == len(mention) or text[len(mention)].isspace()):
-        text = text[len(mention):].strip()
+    # ASI:One can retain the visible handle, the address, or repeated selected
+    # mentions in TextContent. Remove only this agent's exact leading mentions.
+    # Never strip another recipient or an occurrence inside narrative content.
+    mentions = ('@' + agent_address, '@agenticgamemaster')
+    while text:
+        for mention in mentions:
+            if (text[:len(mention)].lower() == mention.lower()
+                    and (len(text) == len(mention) or text[len(mention)].isspace())):
+                text = text[len(mention):].strip()
+                break
+        else:
+            break
     return text
 
 

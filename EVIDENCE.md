@@ -2,6 +2,21 @@
 
 Updated 2026-11-05. This is a tracker, not a declaration that the challenge is complete.
 
+## Latest: visible-handle command routing
+
+The owner's screenshot confirmed correct recipient selection. A retained
+`@agenticgamemaster` prefix was not normalized by the code, so commands entered
+story generation. This was an application bug, not demonstrated user error.
+The fix is deployed and 47 local tests pass. A hosted probe including the literal
+handle in every request passed all seven assertions: three reviews detected the
+conflict, all three preserved the correct total cost, and status remained unchanged.
+The temporary probe is stopped. Existing campaign records were preserved; a new
+conversation is recommended for the owner's post-fix ASI:One retest, still pending.
+
+See [routing regression summary](evidence/asi-handle-routing.json),
+[transport logs](evidence/asi-handle-routing-transport.txt), and
+[literal-handle probe](evidence/asi-handle-routing-probe.py).
+
 ## Latest review regression fix
 
 Owner subsequently supplied ASI:One review `3ae0a969e77f`, confirming a real

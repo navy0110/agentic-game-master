@@ -174,9 +174,18 @@ def parse_result(raw):
 
 def normalize_message(text, agent_address):
     text = text.strip()
-    mention = "@" + agent_address
-    if text.startswith(mention) and (len(text) == len(mention) or text[len(mention)].isspace()):
-        text = text[len(mention):].strip()
+    # ASI:One can retain the visible handle, the address, or repeated selected
+    # mentions in TextContent. Remove only this agent's exact leading mentions.
+    # Never strip another recipient or an occurrence inside narrative content.
+    mentions = ('@' + agent_address, '@agenticgamemaster')
+    while text:
+        for mention in mentions:
+            if (text[:len(mention)].lower() == mention.lower()
+                    and (len(text) == len(mention) or text[len(mention)].isspace())):
+                text = text[len(mention):].strip()
+                break
+        else:
+            break
     return text
 
 def render_status(state):
@@ -598,7 +607,7 @@ if not globals().get('_AGM_TEST_MODE', False):
                 campaign_locks[lock_key] = lock
             async with lock:
                 normalized = normalize_message(text, agent.address)
-                if normalized.split(maxsplit=1)[0:1] == ['/review']:
+                if normalized.split(maxsplit=1) and normalized.split(maxsplit=1)[0].lower() == '/review':
                     extra = normalized[len('/review'):].strip()
                     reply = await request_lore_review(ctx, sender, str(ctx.session), str(msg.msg_id), extra)
                 else:

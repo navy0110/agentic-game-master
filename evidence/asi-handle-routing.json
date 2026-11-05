@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-05",
+  "root_cause": "Only address mentions were normalized; retained @agenticgamemaster caused commands to enter story generation.",
+  "fix": "Strip exact leading own-address or own-handle mentions; preserve other handles and narrative mentions.",
+  "local_tests_passed": 47,
+  "literal_mention_in_every_probe_request": true,
+  "hosted_checks": {
+    "review1_detected_conflict": true,
+    "review2_detected_conflict": true,
+    "review3_detected_conflict": true,
+    "review1_preserves_cost": true,
+    "review2_preserves_cost": true,
+    "review3_preserves_cost": true,
+    "review_read_only": true
+  },
+  "owner_asi_one_retest_after_fix": "pending",
+  "existing_campaign_records": "preserved"
+}

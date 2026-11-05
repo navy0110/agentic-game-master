@@ -131,3 +131,25 @@ validator; generated suggestions still require GM review.
 After deployment, three hosted repeats explicitly recommended one memory per
 spell, three total. All quantity checks and unchanged-status checks passed.
 The temporary probe was stopped. See [quantity regression evidence](evidence/lorekeeper-cost-preservation.json).
+
+## ASI:One visible-handle command routing fix
+
+The owner supplied a screenshot showing the correct selected recipient and a
+message starting `@agenticgamemaster /review Rules: ...`. The prior normalizer
+only removed an address mention (`@agent1...`), so a retained visible handle
+caused `/review` and `/status` to enter story generation. The earlier suspicion
+that the owner selected the wrong recipient was not supported by this screenshot.
+
+The normalizer now removes only exact leading occurrences of this agent's address
+or visible handle, including repeated mentions and whitespace/newlines. Other
+handles, handle-prefix lookalikes and mentions inside narrative text are preserved.
+Hosted `/review` command matching is case-insensitive. 47 local tests pass, including
+the screenshot-style request, a deterministic mentioned `/status`, and assertions
+that neither path invokes the story model or writes campaign state.
+
+Earlier misrouted commands could have created story turns. Existing campaign
+records were preserved; use a new conversation for the final owner retest.
+
+The fix is deployed. All seven live probe checks passed with a literal handle
+prefix on every request, including three successful cost-preserving reviews and
+unchanged status. [Routing regression evidence](evidence/asi-handle-routing.json).

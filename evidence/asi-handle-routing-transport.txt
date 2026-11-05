@@ -1,0 +1,30 @@
+Owner-operated hosted technical test. All commands include a literal @agenticgamemaster prefix. Platform timestamps are UTC. Campaign payloads omitted.
+
+# agm
+2026-11-05T16:28:57.584000  AGM event=review-sent; reference=2662a1ef5f16; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T16:28:59.578000  AGM event=review-delivery; reference=2662a1ef5f16; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T16:28:59.579000  AGM event=review-received; reference=2662a1ef5f16; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T16:29:02.003000  AGM event=review-sent; reference=cda3652475ed; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T16:29:04.359000  AGM event=review-delivery; reference=cda3652475ed; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T16:29:04.359000  AGM event=review-received; reference=cda3652475ed; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T16:29:07.932000  AGM event=review-sent; reference=bad1817152a8; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T16:29:10.427000  AGM event=review-delivery; reference=bad1817152a8; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T16:29:10.427000  AGM event=review-received; reference=bad1817152a8; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T16:29:16.826000  AGM event=status; message=1857adcc0abc; turn=0; model_call=false
+
+# lorekeeper
+2026-11-05T15:04:53.747000  LORE event=review-received; reference=91ce6199aa50; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T15:04:54.574000  LORE event=review-completed; reference=91ce6199aa50; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T15:04:58.550000  LORE event=review-received; reference=fadb4d210351; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T15:04:59.762000  LORE event=review-completed; reference=fadb4d210351; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T15:05:07.672000  LORE event=review-received; reference=adddbfc65747; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T15:05:08.554000  LORE event=review-completed; reference=adddbfc65747; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T16:28:58.279000  LORE event=review-received; reference=2662a1ef5f16; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T16:28:59.180000  LORE event=review-completed; reference=2662a1ef5f16; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T16:29:03.495000  LORE event=review-received; reference=cda3652475ed; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T16:29:04.330000  LORE event=review-completed; reference=cda3652475ed; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T16:29:08.861000  LORE event=review-received; reference=bad1817152a8; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T16:29:10.354000  LORE event=review-completed; reference=bad1817152a8; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+
+# probe
+2026-11-05T16:29:18.334000  PROBE checks={"review1_detected_conflict": true, "review2_detected_conflict": true, "review3_detected_conflict": true, "review1_preserves_cost": true, "review2_preserves_cost": true, "review3_preserves_cost": true, "review_read_only": true}

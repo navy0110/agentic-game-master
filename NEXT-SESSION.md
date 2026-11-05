@@ -1,61 +1,61 @@
-# Resume after November 5 implementation
+# Resume — current state, November 5, 2026
 
 ## Completed
 
-- Existing Agentic Game Master identity preserved and active.
-- Separate AGM Lorekeeper deployed and active.
-- Hosted `/review [notes]` delegates a bounded, read-only consistency review.
-- Initial integration: 42 local tests and all six real hosted probe checks passed.
-- Follow-up fix: 44 local tests pass after deriving the reviewer verdict in code;
-  reference `3eda585bd753` was a validation failure, not a timeout. See LOREKEEPER.md.
-- Temporary AGM Review Probe stopped; QA Tester was not modified.
-- Working pre-change primary source backed up outside the repository in
-  workspace work/agm-backup-before-lorekeeper/agent.py. No existing campaigns deleted.
-- Public landing embeds https://youtu.be/vDiybBDsA-Q (56 seconds).
+- Agentic Game Master and the separate AGM Lorekeeper are deployed and active.
+- `/review` sends typed messages to Lorekeeper and returns an advisory GM-only report.
+- The review never intentionally changes campaign state or player choices.
+- 47 local tests pass.
+- Latest hosted probe: all seven checks pass with a literal `@agenticgamemaster`
+  before every command: three conflict detections, three correct resource costs,
+  and unchanged deterministic status. Temporary probe stopped; QA Tester untouched.
+- The model verdict is computed from validated findings. Suggestions explicitly
+  preserve per-action versus total costs. Exact source-quote validation remains.
+- The retained visible handle now normalizes correctly; previously only the
+  address mention was stripped, causing commands to enter story generation.
+- The owner's screenshot confirmed correct recipient selection; this was our
+  application bug, not demonstrated user error.
+- Existing records/history preserved. Earlier misrouted commands may have saved
+  story turns; use a new conversation for the final owner test.
+- Public landing embeds the 56-second video https://youtu.be/vDiybBDsA-Q.
 
-## First action next session
+## First action when returning
 
-Owner confirmed an ASI:One round trip (`3ae0a969e77f`). Its suggestion confused
-three memories total with three per spell; this was caught during review. The
-reviewer's cost-preservation instructions were strengthened. Retest the corrected
-suggestion; do not treat the original wording as a fully correct example.
+Open https://asi1.ai/ai/agenticgamemaster in a NEW conversation and select
+@agenticgamemaster as recipient for each message.
 
-Open https://asi1.ai/ai/agenticgamemaster and select @agenticgamemaster for every
-message. In a new conversation send:
+1. Send `/status`. Expected exact reply:
+   `No campaign in this conversation yet. Describe your world to begin.`
+2. Send the full message below:
 
 ```
 /review Rules: Every spell permanently consumes one memory of its caster.
 Draft: A mage casts three spells. No memory was lost, and there was no exception
-to the rule. Identify any contradiction and suggest a correction.
+to the rule. Identify the contradiction and suggest a correction without choosing
+which memory is lost.
 ```
 
-Expect a GM-only review naming the separate reviewer, quoting the supplied draft
-and suggesting a correction. Then `/status` should still show no campaign.
-For an existing campaign: `/status`, `/review`, `/status` must preserve the turn
-and counts. Review can include secrets; do not screen-share it with players.
+Expect `Lorekeeper review — GM only`, the separate reviewer address and a reference,
+with one memory per spell and three memories total. Then `/status` must still
+report no campaign. Save the actual ASI:One result as owner evidence; this is not
+an independent external participant or paid hiring.
 
-## Submission copy — optional collaboration
+## Submission still pending
 
-Agentic Game Master delegates optional consistency reviews to a separate hosted
-agent, AGM Lorekeeper, through typed uAgents messages. Lorekeeper checks the
-supplied draft and canon, returns evidence-backed observations, and leaves all
-campaign changes to the GM. We verified a real round trip between two distinct
-agent addresses, read-only behavior, and normal generation afterward. The
-integration has bounded timeouts, one validation repair, and an explicit fallback.
+- Add actual owner ASI:One proof and collaboration evidence to the Fetch.ai draft.
+- Independent external retesting of `/review` remains pending.
+- Review and press Submit before November 8, 2026, 23:59 Argentina time.
+  Saving a draft is not a submission. Optional bonus acceptance belongs to judges.
+- No payment protocol, paid subscriptions, real revenue or paid hiring is claimed.
+- Base44 remains unfulfilled; a Cloudflare landing is not a Base44 application.
 
-## Still pending
+## Links and evidence
 
-- Capture an actual ASI:One review from the owner; the automated probe is technical
-  verification and must not be described as an independent user or paid hiring.
-- Add the collaboration evidence and concise explanation to the Fetch.ai draft.
-- External retesting of `/review`; no payment integration or sales claimed.
-- Review and press Submit before November 8, 2026, 23:59 Argentina time. A saved
-  draft is not a submitted entry. Fetch.ai's acceptance of optional bonus evidence
-  remains a sponsor decision.
-- Base44 challenge remains unfulfilled; the Cloudflare landing does not meet its
-  built-and-published-on-Base44 requirement.
-
-Public trial: https://asi1.ai/ai/agenticgamemaster
-
-Agentverse reviewer profile:
-https://agentverse.ai/agents/details/agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya/profile
+- Agent: https://asi1.ai/ai/agenticgamemaster
+- Landing: https://agentic-game-master.atom139139.workers.dev/
+- Project: https://app.strangerbuilds.com/p/agentic-game-master
+- Demo: https://youtu.be/vDiybBDsA-Q
+- Lorekeeper: agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+- Latest regression: evidence/asi-handle-routing.json and its transport/probe files.
+- Earlier reviews: LOREKEEPER.md and evidence/lorekeeper-*.json.
+- Backup of pre-integration source: workspace work/agm-backup-before-lorekeeper/agent.py.

@@ -126,6 +126,17 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(normalize_message("@agent1examplex /status", address), "@agent1examplex /status")
         self.assertEqual(normalize_message("Mention @agent1example in the story", address), "Mention @agent1example in the story")
 
+    def test_asi_visible_handle_mentions_are_normalized_at_the_start_only(self):
+        address = 'agent1example'
+        for prefix in ('@agenticgamemaster ', '@AgenticGameMaster\n',
+                       '@agenticgamemaster\u00a0', '@agenticgamemaster @agenticgamemaster ',
+                       '@agent1example @agenticgamemaster '):
+            for command in ('/help', '/status', '/gm-status', '/review Rules: one memory. Draft: none lost.'):
+                self.assertEqual(normalize_message(prefix + command, address), command)
+        for untouched in ('@agenticgamemaster-other /status', '@anotheragent /review',
+                          'An NPC mentions @agenticgamemaster /status in a letter.'):
+            self.assertEqual(normalize_message(untouched, address), untouched)
+
     def test_independent_campaigns_generate_in_parallel(self):
         barrier = threading.Barrier(2)
         def parallel_provider(messages):

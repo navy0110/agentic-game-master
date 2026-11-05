@@ -71,6 +71,34 @@ class ReviewContractTests(unittest.TestCase):
 
 
 class ReviewAdapterTests(unittest.IsolatedAsyncioTestCase):
+    async def test_visible_handle_review_routes_to_peer_without_story_generation(self):
+        hosted, ctx, msg, sent = self.adapter()
+        msg.content[0].text = '@agenticgamemaster /review Rules: Every spell permanently consumes one memory of its caster. Draft: A mage casts three spells. No memory was lost, and there was no exception to the rule.'
+        calls = []
+        async def exchange(peer, request, response_type, timeout):
+            calls.append(request)
+            snapshot = json.loads(request.snapshot_json)
+            self.assertEqual(snapshot['draft'], 'A mage casts three spells. No memory was lost, and there was no exception to the rule.')
+            return response_type(request_id=request.request_id,
+                snapshot_hash=hashlib.sha256(request.snapshot_json.encode()).hexdigest(),
+                report_json=json.dumps({'verdict': 'issues_found', 'findings': [{
+                    'issue': 'Memory cost is missing', 'evidence': 'No memory was lost',
+                    'suggestion': 'One memory per spell, three memories total.'}], 'notes': []}), error=''), None
+        ctx.send_and_receive = exchange
+        with patch('requests.post', side_effect=AssertionError('This command must not call the story model')):
+            await hosted['handle_message'](ctx, 'alice', msg)
+        self.assertEqual(len(calls), 1)
+        self.assertIn('## Lorekeeper review', sent[-1].content[0].text)
+        self.assertEqual(ctx.storage.values, {})
+
+    async def test_visible_handle_status_is_deterministic_without_model_or_state_write(self):
+        hosted, ctx, msg, sent = self.adapter()
+        msg.content[0].text = '@agenticgamemaster /status'
+        with patch('requests.post', side_effect=AssertionError('Status must not call the story model')):
+            await hosted['handle_message'](ctx, 'alice', msg)
+        self.assertEqual(sent[-1].content[0].text, 'No campaign in this conversation yet. Describe your world to begin.')
+        self.assertEqual(ctx.storage.values, {})
+
     def adapter(self):
         helper = helpers.HostedAdapterTests()
         hosted = helper.load_adapter()

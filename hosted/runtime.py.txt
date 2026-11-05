@@ -206,7 +206,7 @@ if not globals().get('_AGM_TEST_MODE', False):
                 campaign_locks[lock_key] = lock
             async with lock:
                 normalized = normalize_message(text, agent.address)
-                if normalized.split(maxsplit=1)[0:1] == ['/review']:
+                if normalized.split(maxsplit=1) and normalized.split(maxsplit=1)[0].lower() == '/review':
                     extra = normalized[len('/review'):].strip()
                     reply = await request_lore_review(ctx, sender, str(ctx.session), str(msg.msg_id), extra)
                 else:
