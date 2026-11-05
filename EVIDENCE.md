@@ -5,6 +5,8 @@ Updated 2026-11-04. This is a tracker, not a declaration that the challenge is c
 ## Verified implementation
 
 - Public source: https://github.com/navy0110/agentic-game-master
+- Reliability fixes published and remote branch verified:
+  https://github.com/navy0110/agentic-game-master/commit/1aec485fd31521cfd1dabaf9ee22243146cd71d7
 - Hosted Agentverse address: `agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5`
 - Verified profile handle: `@agenticgamemaster`
 - Hosted compile/start and Almanac registration confirmed via AVCTL logs.
@@ -21,9 +23,15 @@ Updated 2026-11-04. This is a tracker, not a declaration that the challenge is c
   page on 2026-11-03. It shows FETCH.AI · EN CURSO and the house on Fetch.ai's island.
 - Stranger Builds public project: https://app.strangerbuilds.com/p/agentic-game-master
 - Public project link is published and points to the correct hosted Agentverse profile.
-- Public team shows Natalia Gonzalez @navynox and +1 more member. The owner
-  confirms the second member is inside the project; invitation acceptance has
-  not been independently checked in the signed-in dashboard.
+- Public page rechecked on 2026-11-04: team members @navynox and @ivavala
+  are both listed explicitly.
+- Public project now shows ONLINE, MEJORADO and USUARIOS REALES. Both Fetch.ai
+  and Base44 challenges are listed as EN CURSO; neither is represented here as
+  completed. Base44's actual build and qualifying evidence remain unverified.
+- Public evidence gallery shows one team proof image dated November 4 with the
+  caption: "After the fixes, all three Agentverse automated tests passed: command
+  guidance, NPC generation, and story continuation." This gallery count is not
+  a count of independent participant trials.
 - Public Agentverse profile verified logged out:
   https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile
   Profile shows Active and ASI Available.
@@ -44,7 +52,8 @@ Rules rechecked on 2026-11-04: the current minimum is ONE outside-team builder's
 written feedback via assigned Trick or Feedback, with tries through ASI:One,
 and one resulting improvement. Earlier guidance requiring three was incorrect
 for these current rules. Additional rows below are optional additional evidence.
-The owner reports all three automatic regression prompts passed together; those
+The owner reports all three automatic regression prompts passed together, and
+the corresponding team proof is now listed publicly on the project page. Those
 automatic tests do not count as outside-builder feedback.
 
 | Trial | Assigned participant reference | Date | ASI:One usage proof | Original note | Verified in event |

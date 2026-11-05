@@ -52,7 +52,8 @@ but its registration as a separate platform trial has not been confirmed.
 
 - Original assigned Trick or Feedback note/link and confirmation of ASI:One use.
 - Screenshot of the successful three-prompt Agentverse Testing run.
-- Public source commit/diff containing these changes (not yet recorded here).
+- Public source commit containing these changes:
+  https://github.com/navy0110/agentic-game-master/commit/1aec485fd31521cfd1dabaf9ee22243146cd71d7
 - Independent tester's post-fix response, when received.
 
 Do not describe automatic test success as universal reliability. Model latency

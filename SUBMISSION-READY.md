@@ -6,15 +6,15 @@ integration is claimed. No submission has been sent by the assistant.
 | Item | Ready to use / remaining action |
 |---|---|
 | Project | https://app.strangerbuilds.com/p/agentic-game-master |
-| Challenge | Get your agent hired — Fetch.ai |
+| Challenge | Get your agent hired — Fetch.ai, publicly EN CURSO. Base44 is also open but its completion is not verified. |
 | Public agent | https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile |
 | Trial entry point | https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5 |
 | Source | https://github.com/navy0110/agentic-game-master |
 | Demo | Final 113.1-second MP4 approved; owner confirms YouTube publication, exact URL pending here |
 | Feedback proof | Owner confirms one original note was submitted through Stranger Builds; attach its actual note/assignment reference. Additional Slack feedback is not yet confirmed as a second platform trial. |
 | Improvement | IMPROVEMENT-RECAP.md; all three automatic regression prompts passed together per owner |
-| Test screenshot | Owner reported success; actual image for public evidence has not been supplied |
-| Team | Owner confirms second member joined; check membership in signed-in project |
+| Test screenshot | One team proof image with the three-prompt success caption is listed publicly on the project page |
+| Team | Public page explicitly lists @navynox and @ivavala |
 | Prior work | Memeria predates the hackathon; this independent new agent is the entry. No Memeria code included. |
 | Monetization | Proposed USD 5 pilot; billing and paying customers are not claimed |
 | Deadline | November 8, 2026, 23:59 Argentina time; https://strangerbuilds.com/rules |
