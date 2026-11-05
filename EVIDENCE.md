@@ -4,6 +4,12 @@ Updated 2026-11-05. This is a tracker, not a declaration that the challenge is c
 
 ## Latest review regression fix
 
+Owner subsequently supplied ASI:One review `3ae0a969e77f`, confirming a real
+owner chat reached Lorekeeper and returned a report. The suggestion had a
+per-spell/total-cost wording error; it is not presented as fully correct output.
+Reviewer instructions were strengthened to preserve quantities and avoid added
+costs. Independent external retesting of `/review` remains pending.
+
 Owner ASI:One review `3eda585bd753` failed after a successfully delivered typed
 reply because the model verdict contradicted its findings. This was not a timeout.
 The verdict is now derived in code; exact evidence quotes and strict report

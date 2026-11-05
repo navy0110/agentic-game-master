@@ -113,3 +113,21 @@ After deployment, three consecutive owner-operated hosted repeats of the failing
 prompt all returned a supported conflict and suggested correction. `/status`
 remained unchanged with no campaign created. [Regression evidence](evidence/lorekeeper-verdict-fix.json).
 This is not an independent participant trial; the owner's ASI:One retry is pending.
+
+## Owner ASI:One round trip and resource-cost correction
+
+The owner supplied a successful ASI:One review with reference `3ae0a969e77f`.
+It identified the contradiction and named the separate reviewer. Its proposed
+change incorrectly said each of three spells should consume three distinct
+memories. The rule requires one memory per spell, three total; it also does not
+explicitly add a distinctness constraint. This confirms transport, not complete
+semantic accuracy of the suggestion.
+
+The reviewer instructions now explicitly preserve the per-action rate, distinguish
+it from total cost, and prohibit inventing additional resource or distinctness
+requirements. This is a model instruction improvement, not a general arithmetic
+validator; generated suggestions still require GM review.
+
+After deployment, three hosted repeats explicitly recommended one memory per
+spell, three total. All quantity checks and unchanged-status checks passed.
+The temporary probe was stopped. See [quantity regression evidence](evidence/lorekeeper-cost-preservation.json).

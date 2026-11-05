@@ -15,6 +15,11 @@
 
 ## First action next session
 
+Owner confirmed an ASI:One round trip (`3ae0a969e77f`). Its suggestion confused
+three memories total with three per spell; this was caught during review. The
+reviewer's cost-preservation instructions were strengthened. Retest the corrected
+suggestion; do not treat the original wording as a fully correct example.
+
 Open https://asi1.ai/ai/agenticgamemaster and select @agenticgamemaster for every
 message. In a new conversation send:
 

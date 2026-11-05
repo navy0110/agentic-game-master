@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-05",
+  "owner_asi_one_reference": "3ae0a969e77f",
+  "owner_asi_one_round_trip_confirmed": true,
+  "owner_result_issue": "Suggested three memories for EACH spell instead of three total; also introduced distinctness.",
+  "change": "Explicitly preserve per-action costs and total units; do not add distinctness requirements. Prompt improvement, not a general arithmetic validator.",
+  "local_tests_passed": 44,
+  "hosted_checks": {
+    "review1_detected_conflict": true,
+    "review2_detected_conflict": true,
+    "review3_detected_conflict": true,
+    "review1_preserves_cost": true,
+    "review2_preserves_cost": true,
+    "review3_preserves_cost": true,
+    "review_read_only": true
+  },
+  "captured_synthetic_reports": {
+    "review2": "## Lorekeeper review — GM only\nRead-only review. No campaign facts or player choices were changed.\nReviewer: agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya\nReference: fadb4d210351\n\n- Issue: Rule states each spell permanently consumes one memory of its caster; three spells should cost three memories total (one per spell), but none were lost.\n  Evidence: A mage casts three spells. No memory was lost, and there was no exception to the rule.\n  Suggested change: Apply the cost: three memories total, one per spell. Leave the choice of which three memories are lost to the GM/player; do not add requirements such as distinct memories.\n\nThe GM decides whether to apply a correction. This review may contain spoilers.",
+    "review3": "## Lorekeeper review — GM only\nRead-only review. No campaign facts or player choices were changed.\nReviewer: agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya\nReference: adddbfc65747\n\n- Issue: Rule states each spell permanently consumes one memory; three spells should cost three memories total (one per spell), but none were lost.\n  Evidence: A mage casts three spells. No memory was lost\n  Suggested change: Apply the cost: three memories total, one per spell. Leave the choice of which three memories are lost to the GM/player.\n\nThe GM decides whether to apply a correction. This review may contain spoilers."
+  },
+  "external_independent_retest": "pending"
+}
