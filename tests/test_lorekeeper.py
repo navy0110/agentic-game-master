@@ -8,12 +8,28 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from agm.lorekeeper import review_snapshot, parse_review
+from agm.lorekeeper import review_snapshot, parse_review, parse_review_completion
 import test_hosted as helpers
 from test_hosted import Storage, ROOT
 
 
 class ReviewContractTests(unittest.TestCase):
+    def test_model_verdict_is_derived_in_both_inconsistent_cases(self):
+        snapshot = review_snapshot(Storage(), 'a', 's', 'Draft: no memory was lost.')
+        finding = {'issue': 'Memory cost missing', 'evidence': 'no memory was lost.',
+                   'suggestion': 'Apply the stated cost.'}
+        for generated in (None, 'no_conflict_found', 'issues_found'):
+            for findings in ([], [finding]):
+                value = {'findings': findings, 'notes': []}
+                if generated is not None: value['verdict'] = generated
+                result = parse_review_completion(json.dumps(value), snapshot)
+                self.assertEqual(result['verdict'], 'issues_found' if findings else 'no_conflict_found')
+
+    def test_derived_verdict_still_rejects_ungrounded_or_malformed_findings(self):
+        snapshot = review_snapshot(Storage(), 'a', 's', 'A scene')
+        for findings in ('not a list', [{'issue': 'issue', 'evidence': 'Invented quote', 'suggestion': 'change'}]):
+            with self.assertRaises(ValueError):
+                parse_review_completion(json.dumps({'findings': findings, 'notes': []}), snapshot)
     def test_snapshot_is_read_only_and_sender_session_scoped(self):
         store = Storage()
         def provider(_):

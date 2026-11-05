@@ -2,6 +2,20 @@
 
 Updated 2026-11-05. This is a tracker, not a declaration that the challenge is complete.
 
+## Latest review regression fix
+
+Owner ASI:One review `3eda585bd753` failed after a successfully delivered typed
+reply because the model verdict contradicted its findings. This was not a timeout.
+The verdict is now derived in code; exact evidence quotes and strict report
+validation remain required. 44 local tests pass. Three repeated hosted technical
+trials of the failing prompt all detected the contradiction, and status remained
+unchanged with no campaign created. The temporary probe is stopped. The owner's
+ASI:One retry after this fix remains pending.
+
+See [fix summary](evidence/lorekeeper-verdict-fix.json),
+[transport evidence](evidence/lorekeeper-verdict-fix-transport.txt), and
+[regression probe source](evidence/lorekeeper-verdict-probe.py).
+
 ## Public landing and outstanding verification
 
 - Landing: https://agentic-game-master.atom139139.workers.dev/

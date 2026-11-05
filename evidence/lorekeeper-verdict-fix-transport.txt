@@ -1,0 +1,27 @@
+Owner-operated regression test, not an external ASI:One trial. Platform timestamps are UTC; campaign payloads omitted.
+
+# agm
+2026-11-05T14:23:07.218000  AGM event=review-sent; reference=9e7ebab6de19; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T14:23:11.576000  AGM event=review-delivery; reference=9e7ebab6de19; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T14:23:11.577000  AGM event=review-received; reference=9e7ebab6de19; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T14:23:13.740000  AGM event=review-sent; reference=2c4b8dabc7c2; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T14:23:16.020000  AGM event=review-delivery; reference=2c4b8dabc7c2; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T14:23:16.020000  AGM event=review-received; reference=2c4b8dabc7c2; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T14:23:19.940000  AGM event=review-sent; reference=d47f6f44e556; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+2026-11-05T14:23:22.727000  AGM event=review-delivery; reference=d47f6f44e556; response_type=LoreReviewResponse; delivery=delivered
+2026-11-05T14:23:22.727000  AGM event=review-received; reference=d47f6f44e556; peer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya; snapshot=3e12c379ab52
+
+# lorekeeper
+2026-11-05T04:13:59.130000  LORE event=review-completed; reference=3a5e8112af6b; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T14:17:59.888000  LORE event=review-received; reference=3eda585bd753; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=1ac26b9c7cde
+2026-11-05T14:18:07.073000  LORE event=review-failed; reference=3eda585bd753; type=ValueError
+2026-11-05T14:18:07.073000  LORE validation=Review verdict contradicts findings.
+2026-11-05T14:23:09.307000  LORE event=review-received; reference=9e7ebab6de19; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T14:23:10.931000  LORE event=review-completed; reference=9e7ebab6de19; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T14:23:14.609000  LORE event=review-received; reference=2c4b8dabc7c2; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T14:23:15.972000  LORE event=review-completed; reference=2c4b8dabc7c2; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+2026-11-05T14:23:20.812000  LORE event=review-received; reference=d47f6f44e556; sender=agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5; snapshot=3e12c379ab52
+2026-11-05T14:23:22.047000  LORE event=review-completed; reference=d47f6f44e556; reviewer=agent1q007u0ldq88xpuxv6vweqkf5gqss468rn4363pufmhystwp4tc52wgd67ya
+
+# probe
+2026-11-05T14:23:28.851000  PROBE checks={"review1_detected_conflict": true, "review2_detected_conflict": true, "review3_detected_conflict": true, "review_read_only": true}

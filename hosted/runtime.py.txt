@@ -182,7 +182,7 @@ if not globals().get('_AGM_TEST_MODE', False):
             report = parse_review(response.report_json, snapshot)
         except Exception as exc:
             ctx.logger.info(f'AGM event=review-unavailable; reference={reference}; type={type(exc).__name__}')
-            return ('Lorekeeper could not complete a validated review in time. '
+            return ('Lorekeeper could not complete a validated review. '
                     'Your existing content and campaign are unchanged; no review is claimed. '
                     'You can continue playing or retry /review later. Reference: ' + reference)
         ctx.logger.info(f'AGM event=review-received; reference={reference}; peer={peer}; snapshot={digest[:12]}')

@@ -5,7 +5,9 @@
 - Existing Agentic Game Master identity preserved and active.
 - Separate AGM Lorekeeper deployed and active.
 - Hosted `/review [notes]` delegates a bounded, read-only consistency review.
-- 42 local tests passed, and all six real hosted probe checks passed.
+- Initial integration: 42 local tests and all six real hosted probe checks passed.
+- Follow-up fix: 44 local tests pass after deriving the reviewer verdict in code;
+  reference `3eda585bd753` was a validation failure, not a timeout. See LOREKEEPER.md.
 - Temporary AGM Review Probe stopped; QA Tester was not modified.
 - Working pre-change primary source backed up outside the repository in
   workspace work/agm-backup-before-lorekeeper/agent.py. No existing campaigns deleted.

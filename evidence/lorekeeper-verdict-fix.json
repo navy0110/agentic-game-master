@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-05",
+  "original_failure_reference": "3eda585bd753",
+  "root_cause": "Model verdict contradicted its findings; delivered typed reply rejected by validation, not a timeout.",
+  "fix": "Model generates findings and notes; code derives the verdict. Grounding and transport validation remain strict.",
+  "local_tests_passed": 44,
+  "live_checks": {
+    "review1_detected_conflict": true,
+    "review2_detected_conflict": true,
+    "review3_detected_conflict": true,
+    "review_read_only": true
+  },
+  "verification_type": "owner-operated hosted technical probe",
+  "external_asi_one_retest": "pending"
+}

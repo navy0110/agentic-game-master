@@ -78,7 +78,7 @@ https://uagents.fetch.ai/docs/guides/communication
 
 ## Current validation
 
-42 local tests pass, including eleven new review tests for owner/session isolation,
+44 local tests pass, including thirteen new review tests for owner/session isolation,
 evidence grounding, bounded payloads, response correlation, no story-model call
 in AGM's review path, no campaign mutation, timeout fallback and reviewer sender
 authorization, bounded format/evidence repair, and explicit standalone Rules:/Draft:
@@ -93,3 +93,23 @@ detection, a saved-scene review with no status changes, and generation continuin
 to turn 2 afterward. The probe was stopped after evidence collection. See
 [summary](evidence/lorekeeper-live-2026-11-05.json) and
 [transport logs](evidence/lorekeeper-transport-2026-11-05.txt).
+
+## Follow-up: contradictory model verdict
+
+An owner ASI:One request failed with reference `3eda585bd753`. Transport logs
+confirmed successful delivery to Lorekeeper and a typed reply in about 8.5 seconds.
+The reviewer rejected the model output with `Review verdict contradicts findings.`
+This was a validation failure, not a transport timeout, and no campaign update occurred.
+
+The model now produces only findings and notes. The reviewer derives `issues_found`
+or `no_conflict_found` from the validated findings in code. Exact quote checks,
+field limits, response correlation and the strict inter-agent report contract are
+unchanged. A legacy model verdict is ignored at the model-adapter boundary; an
+inconsistent inter-agent report remains invalid. The fallback no longer describes
+every validation failure as a timeout. Tests cover both contradictory verdict
+directions and ensure invented evidence is still rejected.
+
+After deployment, three consecutive owner-operated hosted repeats of the failing
+prompt all returned a supported conflict and suggested correction. `/status`
+remained unchanged with no campaign created. [Regression evidence](evidence/lorekeeper-verdict-fix.json).
+This is not an independent participant trial; the owner's ASI:One retry is pending.
