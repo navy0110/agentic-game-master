@@ -1,6 +1,6 @@
 # Hackathon evidence tracker
 
-Updated 2026-11-03. This is a tracker, not a declaration that the challenge is complete.
+Updated 2026-11-04. This is a tracker, not a declaration that the challenge is complete.
 
 ## Verified implementation
 
@@ -17,7 +17,13 @@ Updated 2026-11-03. This is a tracker, not a declaration that the challenge is c
 ## Event status
 
 - Project created in Stranger Builds: user confirmed.
-- Fetch.ai challenge accepted: NOT YET, per user confirmation.
+- Fetch.ai challenge accepted: VERIFIED on the public Stranger Builds project
+  page on 2026-11-03. It shows FETCH.AI · EN CURSO and the house on Fetch.ai's island.
+- Stranger Builds public project: https://app.strangerbuilds.com/p/agentic-game-master
+- Public project link is published and points to the correct hosted Agentverse profile.
+- Public team shows Natalia Gonzalez @navynox and +1 more member. The owner
+  confirms the second member is inside the project; invitation acceptance has
+  not been independently checked in the signed-in dashboard.
 - Public Agentverse profile verified logged out:
   https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile
   Profile shows Active and ASI Available.
@@ -26,21 +32,51 @@ Updated 2026-11-03. This is a tracker, not a declaration that the challenge is c
   End-to-end conversation verified by the owner; independent participant testing pending.
 - Public repository creation verified via GitHub: 2026-11-02 19:36:24 UTC
   (16:36:24 ART), after the event opening. Preserve first-commit history too.
-- Public launch proof: pending public post or <=2-minute demo/pitch video.
-- Team and community details: user must verify before 2026-11-03 23:59 ART.
+- Demo produced locally: videos/agentic-game-master-demo/renders/agentic-game-master-demo.mp4,
+  113.1 seconds, English voice/subtitles, 1080p. Encoded-file checks passed.
+  Public launch proof remains pending until the video/post is uploaded and linked.
+- Current rules updated November 4 allow team/community changes until submission
+  close on November 8, 23:59 ART; older November 3 lock guidance is superseded.
 
-## Official assigned trials — none verified yet
+## Participant feedback — owner-confirmed platform note
+
+Rules rechecked on 2026-11-04: the current minimum is ONE outside-team builder's
+written feedback via assigned Trick or Feedback, with tries through ASI:One,
+and one resulting improvement. Earlier guidance requiring three was incorrect
+for these current rules. Additional rows below are optional additional evidence.
+The owner reports all three automatic regression prompts passed together; those
+automatic tests do not count as outside-builder feedback.
 
 | Trial | Assigned participant reference | Date | ASI:One usage proof | Original note | Verified in event |
 |---|---|---|---|---|---|
-| 1 | Pending | | | | No |
-| 2 | Pending | | | | No |
+| 1 | Owner confirms original feedback was posted through Stranger Builds; assignment reference pending | Report supplied 2026-11-04 | Usage proof link pending | Original response/clarity feedback supplied in this conversation | Platform note confirmed by owner; app completion status not independently checked |
+| 2 | Additional Slack comment reported by owner; platform registration requested | Unknown | Pending | Exact note/reference pending | Not confirmed as a separate qualifying platform trial |
 | 3 | Pending | | | | No |
 
 Do not add personal information to this public repository. Store only participant
 references/proof links whose publication is authorized. Keep private evidence private.
 
-## Improvement from external feedback — pending
+## Feedback-driven improvement — implemented; external retest pending
+
+### Report supplied by the owner on 2026-11-04
+
+Original note: "The agent doesn't respond and there is no feedback. I like the
+concept though curious how an agent can fufill this."
+
+The owner confirms the original note was submitted through Stranger Builds.
+Its assignment reference and ASI:One usage proof have not been supplied here;
+platform challenge-completion status has not been independently checked. Follow-up logs supplied by
+the owner confirmed JSONDecodeError and ModelTimeout failures. These do not
+establish the exact cause of the original tester's individual incident.
+
+Changes implemented: move blocking hosted processing off the event loop,
+serialize requests per campaign, shorten model network waits, distinguish model
+timeout/unavailability from validation errors, answer greetings without inference,
+and clarify recipient selection and actual capabilities in the public listing.
+The owner reports the final demo has been uploaded to YouTube; its exact watch
+URL has not yet been supplied here. The owner updated the hosted code and confirmed all three Agentverse regression
+prompts passed together. An independent retest remains pending. See
+IMPROVEMENT-RECAP.md for the full recap and missing proof links.
 
 Record the real note, the problem, the change, its commit and the follow-up result.
 Existing fixes (player-agency instructions, corrected canon, spoiler-safe status,

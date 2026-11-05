@@ -18,3 +18,17 @@ subtitles if speaking another language. Show unfinished features as future work.
 
 Before recording, choose an example whose generation and continuation both work.
 Capture the outside-participant feedback separately once it actually exists.
+
+## Recording now
+
+Do not wait for the independent retest to record the working product. Start with
+@agenticgamemaster selected, generate the harbor official NPC with motives, secret
+and three dialogue lines, then send an explicit player decision in the SAME
+conversation. Show /status and /gm-status from that session. These commands have
+not yet been reverified in a fresh real demo session, so check before recording.
+
+Prefer one coherent campaign over combining unrelated successful test outputs.
+Show the real three-prompt Testing result as technical verification. The current
+feedback/improvement recap is in IMPROVEMENT-RECAP.md. Until the external retest
+arrives, say "Our three regression tests pass; independent retesting is pending."
+Leave the final evidence segment editable so the actual retest result can be added.

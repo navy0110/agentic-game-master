@@ -1,20 +1,38 @@
 # Agentic Game Master
 
 The current hosting target is [Agentverse Hosted Agents](hosted/README.md).
-The hosted agent is compiled and running; end-to-end hosted chat tests are pending.
+The hosted agent is live. The owner verified ASI:One generation and saved state,
+and reported all three Agentverse regression prompts passing together.
 Cloudflare remains an optional, undeployed alternative in [cloudflare/DEPLOY.md](cloudflare/DEPLOY.md).
 
 A world-aware Game Master agent for developers and tabletop GMs. Bring a world
 brief, hire the agent to prepare a playable quest, and continue the story from
-player decisions. Campaign canon and consequences persist in SQLite.
+player decisions. The hosted version persists campaign records in Agentverse;
+the separate local prototype uses SQLite.
+
+## Try the hosted agent
+
+- [Chat on ASI:One](https://asi1.ai/ai/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5)
+- [Agentverse profile](https://agentverse.ai/agents/details/agent1qtxm6c6nwrshe40222wu3r7d6hy52h9flkqmhm39v4a6utulgf6qup7dkm5/profile)
+- [Stranger Builds project](https://app.strangerbuilds.com/p/agentic-game-master)
+
+Select **@agenticgamemaster as the recipient for every message** in ASI:One.
+Messages without a mention may reach your personal AI instead. Start with `/help`,
+then ask for an NPC with motives, a GM-only secret and three dialogue lines.
+
+`/status` shows only the turn and record counts. `/gm-status` and `/export` can
+reveal secrets. Commands are display modes, not separate GM/player permissions.
 
 ## Status
 
 Initial implementation: CLI, ASI:One model adapter, campaign storage, JSON export,
 and an Agentverse Chat Protocol adapter. Local ASI inference, mailbox message
 delivery and continuation were verified. The separate Hosted build is deployed;
-its model inference and persistence still require live verification.
+its generation, read-only status and storage across restart were owner-verified.
 No web interface or live game engine integration yet. No Memeria code is included.
+The agent does not currently collaborate with another deployed agent, process
+payments or enforce paid subscriptions. See [feedback-driven changes](IMPROVEMENT-RECAP.md),
+[evidence status](EVIDENCE.md) and the proposed [business model](BUSINESS-MODEL.md).
 
 ## Local setup (PowerShell, Python 3.10+)
 
@@ -36,7 +54,7 @@ only supply content you are authorized to share. Local state is plaintext SQLite
 .\.venv\Scripts\python.exe -m agm.cli export --session harbor --output harbor.json
 ```
 
-Without dependencies or credentials, core tests still run:
+With the project dependencies installed, automated tests run without live credentials:
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -45,7 +63,10 @@ python -m unittest discover -s tests -v
 Tests use an explicit fake provider to verify persistence, isolation and rollback.
 They do not validate model creativity or prove live Agentverse compatibility.
 
-## Agentverse / ASI:One
+## Local mailbox prototype (optional)
+
+For the current hosted build, use [hosted/README.md](hosted/README.md). The steps
+below run the separate local prototype and are not required to use the public agent.
 
 1. Set a unique private AGENT_SEED in .env as well as the ASI API key.
 2. Run `python agent.py` in the configured virtual environment.
@@ -53,8 +74,9 @@ They do not validate model creativity or prove live Agentverse compatibility.
    process online. Follow current Agentverse onboarding for external agents.
 4. Open its profile and test through ASI:One. Start with the example world brief.
 5. Send a player decision in the same conversation. `/export` returns its state.
-   `/status` reads saved facts and open threads without a model call or story
-   advancement. `/help` lists the commands. Unknown commands leave state unchanged.
+   `/status` reads only record counts without a model call or story advancement.
+   `/gm-status` shows full facts and threads, including secrets. `/help` lists the
+   commands. Unknown commands leave state unchanged.
 
 Storage is scoped by sender address AND protocol session. A new session starts
 a new campaign. Cross-device/session campaign sharing is not implemented.
@@ -74,7 +96,8 @@ implemented. GMs should review generated rulings and rewards.
 
 - New repository and first commit timestamps; independent entry point.
 - Agentverse address, public source and a working ASI:One conversation link.
-- Three assigned participant trials through ASI:One, with written feedback.
+- At least one assigned outside-team participant trial through ASI:One, with
+  written feedback, per official rules updated November 4, 2026.
 - At least one documented change from that feedback; working public demo.
 - Declare Memeria as a pre-existing example world, if used later.
 
@@ -84,4 +107,5 @@ implemented. GMs should review generated rulings and rewards.
 - https://uagents.fetch.ai/docs/examples/asi-1
 - https://docs.agentverse.ai/documentation/launch-agents/agentverse-sdk/u-agents
 
-Dependencies use bounded ranges pending a clean live installation and lockfile.
+Use requirements.lock.txt for the pinned local dependency set. See the hosted
+guide for the Agentverse environment and generated single-file deployment.

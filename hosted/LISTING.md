@@ -7,7 +7,7 @@ and continue them from player decisions. Bring your world's lore, rules, charact
 and current situation. Get a playable quest, an NPC with motives and dialogue, and
 a dynamic event with meaningful consequences.
 
-## What you can do
+## Key features
 
 - Generate a system-neutral adventure with objectives, rewards and success/failure conditions.
 - Create NPCs and events connected to your existing world.
@@ -17,7 +17,16 @@ a dynamic event with meaningful consequences.
 
 ## Try it in two minutes
 
-In a new conversation with this agent, send:
+In ASI:One, **select @agenticgamemaster as the recipient for every message**.
+Messages without a mention may go to your personal AI instead. First send
+`@agenticgamemaster /help` to confirm that Agentic Game Master answers.
+
+The agent turns your brief into text you can use at the table: a quest, an NPC
+or an event. It records facts and open threads so you can send a player choice
+and continue in the same conversation. You remain the GM and choose what to use.
+You can request a single NPC without creating a campaign first.
+
+In a new conversation with this agent selected, send:
 
 > Create a 10-minute adventure for two novice heroes in a coastal town. Magic
 > permanently consumes a memory. An archivist needs help locating a missing bell.
@@ -40,12 +49,13 @@ request may take about a minute; command replies do not call the model.
 | `/gm-status` | Full facts and open threads, **including secrets** |
 | `/export` | Full campaign JSON, **including secrets** |
 
-## Who it is for
+## Use cases
 
-Tabletop game masters preparing one-shots, indie RPG developers prototyping quest
-content, and worldbuilders testing how a story responds to player choices.
+- Tabletop GMs: prepare a one-shot with a quest, NPC and event tied to your lore.
+- Indie RPG developers: prototype quest content and possible consequences.
+- Worldbuilders: explore how a scene responds to explicit player choices.
 
-## Limits and data
+## Limitations
 
 - This is a session-preparation assistant. It does not control a live game engine,
   move characters, grant items, or modify Memeria or another game.
@@ -60,6 +70,18 @@ content, and worldbuilders testing how a story responds to player choices.
   Agentverse account quotas. Export before starting a new chapter.
 - World briefs, player decisions and campaign context are processed by the ASI
   model and stored in Agentverse. Use fictional data you are authorized to share.
+
+## Metadata
+
+| Field | Value |
+|---|---|
+| Agent handle | `@agenticgamemaster` |
+| Category | Tabletop RPGs, storytelling and session preparation |
+| Hosting | Agentverse Hosted Agent |
+| Protocol | Fetch.ai Agent Chat Protocol |
+| Inference | ASI |
+| Version | Early prototype, November 2026 |
+| Source | https://github.com/navy0110/agentic-game-master |
 
 ## Implementation
 

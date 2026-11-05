@@ -8,9 +8,9 @@ source = (root / 'agm/engine.py').read_text(encoding='utf-8')
 tree = ast.parse(source)
 pieces = []
 for node in tree.body:
-    if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'SYSTEM' for t in node.targets):
+    if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {'SYSTEM', 'RESPONSE_FORMAT'} for t in node.targets):
         pieces.append(ast.get_source_segment(source, node))
-    elif isinstance(node, ast.FunctionDef) and node.name in {'parse_result', 'normalize_message', 'render_status', 'render_player_status'}:
+    elif isinstance(node, ast.FunctionDef) and node.name in {'generation_options', 'completion_text', 'parse_result', 'normalize_message', 'render_status', 'render_player_status'}:
         pieces.append(ast.get_source_segment(source, node))
 start = source.index('            if previous is None:', source.index('    def _turn('))
 end = source.index('            # Hold SQLite', start)
